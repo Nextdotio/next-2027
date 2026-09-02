@@ -38,7 +38,10 @@
   .hero-d3 { animation-delay: .34s; }
   .hero-d4 { animation-delay: .48s; }
 
-  /* white-silhouette normalisation for the brand walls */
+  /* brand walls: PNGs are pre-baked to structure-preserving white marks by
+     scripts/build_logos.py (luminance -> alpha), so they render unfiltered.
+     .logo-sil remains for the few flat SVG wordmarks only. */
+  .logo-baked { opacity: .85; }
   .logo-sil {
     filter: brightness(0) invert(1);
     mix-blend-mode: screen;

@@ -47,12 +47,14 @@ Confirm it prints `Published` before reporting done. Publishes to
   (→ partners), HR Connect members (→ members). `src/logos.js` is the
   generated manifest (filenames + `TOTAL_BRANDS`); regenerate it if the
   directories change.
-- The walls render every logo as a white silhouette (`.logo-sil` =
-  `brightness(0) invert(1)` + `mix-blend-screen`). Logos whose letterforms
-  are white fills inside dark outlines merge into blobs under that filter -
-  the merge script knocks near-white fills to transparent (same fix as the
-  retreat repo). A few genuinely solid marks (flutter, island-luck) render
-  as solid shapes; that is their real silhouette.
+- Wall PNGs are pre-baked to structure-preserving white marks by
+  `scripts/build_logos.py`: luminance maps to opacity, so a white-on-colour
+  logo keeps its letterforms as cut-outs instead of flattening to a block
+  (the failure a plain CSS whiteout causes). Rerun the script after adding
+  logos - it overwrites in place; pristine sources stay in the sibling
+  repos. The handful of flat SVG wordmarks still use the `.logo-sil` CSS
+  whiteout. A few genuinely solid marks (flutter, island-luck) render as
+  solid shapes; that is their real silhouette.
 - NEXT.io / NEXTPredict brand logos live in `public/logos/brand/`, alongside
   the property lockups (summit-valletta, next-retreat, hrconnect,
   marketingnext) copied from the sibling repos. Portfolio cards render the

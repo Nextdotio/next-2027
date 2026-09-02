@@ -189,7 +189,7 @@ function SectionHead({ eyebrow, title, lead }) {
 function Marquee({ files, dir, reverse = false, dur = 70 }) {
   const row = files.map((f) => (
     <div key={f} className="flex h-16 w-40 shrink-0 items-center justify-center px-6 sm:h-20 sm:w-48">
-      <img src={`${base}logos/${dir}/${f}`} alt="" loading="lazy" className="logo-sil max-h-9 max-w-full object-contain sm:max-h-11" />
+      <img src={`${base}logos/${dir}/${f}`} alt="" loading="lazy" className={`${f.endsWith('.svg') ? 'logo-sil' : 'logo-baked'} max-h-9 max-w-full object-contain sm:max-h-11`} />
     </div>
   ))
   return (
