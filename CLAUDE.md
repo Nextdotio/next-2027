@@ -53,4 +53,10 @@ Confirm it prints `Published` before reporting done. Publishes to
   the merge script knocks near-white fills to transparent (same fix as the
   retreat repo). A few genuinely solid marks (flutter, island-luck) render
   as solid shapes; that is their real silhouette.
-- NEXT.io / NEXTPredict brand logos live in `public/logos/brand/`.
+- NEXT.io / NEXTPredict brand logos live in `public/logos/brand/`, alongside
+  the property lockups (summit-valletta, next-retreat, hrconnect,
+  marketingnext) copied from the sibling repos. Portfolio cards render the
+  lockup instead of a text title wherever one exists (`logo`/`logoH`/`sub`
+  on the item); New York and the NEXTPredict Summit compose the platform
+  logo with a tracked sub-line because no dedicated lockup exists. Media &
+  Advertising and External Projects have no mark and stay as text.

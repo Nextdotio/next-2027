@@ -42,6 +42,7 @@ const PORTFOLIO = [
     items: [
       {
         name: 'NEXT Summit New York',
+        logo: 'brand/next-logo.png', logoH: 'h-8', sub: 'Summit · New York',
         when: '13-14 April 2027 · Convene 30 Hudson Yards',
         extra: 'Focus days 12 & 15 April: NEXT Focus Emerging Verticals and NEXTPredict',
         line: '2,000 senior executives across a four-day New York week. Sixth edition, five-for-five sold out.',
@@ -50,6 +51,7 @@ const PORTFOLIO = [
       },
       {
         name: 'NEXT Summit Valletta',
+        logo: 'brand/summit-valletta.png', logoH: 'h-12',
         when: '26-27 May 2027 · Mediterranean Conference Centre, Malta',
         extra: 'iGaming IDOL gala, rooftop receptions and four focus events in the same week',
         line: 'The Mediterranean flagship, in the industry’s home town. The week the whole market attends.',
@@ -58,6 +60,7 @@ const PORTFOLIO = [
       },
       {
         name: 'NEXTPredict Summit',
+        logo: 'brand/nextpredict-logo.png', logoH: 'h-7', sub: 'Summit · October 2027',
         when: 'October 2027 · New York City',
         extra: 'Dates and venue announced shortly',
         line: 'The prediction markets event, from the platform that covers the category every day.',
@@ -66,6 +69,7 @@ const PORTFOLIO = [
       },
       {
         name: 'NEXT Retreats',
+        logo: 'brand/next-retreat.png', logoH: 'h-12',
         when: 'Europe · Cyprus, 11-13 Oct — LatAm · Cancún, 15-17 Nov',
         extra: 'Invitation-only · 100 delegates per retreat · 50 operators, 50 suppliers',
         line: 'Three days and two nights of unhurried time with the decision-makers. Chatham House Rule.',
@@ -100,6 +104,7 @@ const PORTFOLIO = [
     items: [
       {
         name: 'HR Connect',
+        logo: 'brand/hrconnect.svg', logoH: 'h-9',
         when: 'Malta · annual membership',
         extra: 'Supported by GamingMalta',
         line: 'The HR community for iGaming: benchmarking, mentors, workshops and dinners. From €2,500 a year.',
@@ -108,6 +113,7 @@ const PORTFOLIO = [
       },
       {
         name: 'marketingNEXT',
+        logo: 'brand/marketingnext.svg', logoH: 'h-11',
         when: 'Virtual · monthly surgery',
         extra: 'Invitation-only, two seats per company',
         line: 'The peer-led marketing surgery for senior iGaming marketers. €4,000 a year, by application.',
@@ -327,7 +333,14 @@ export default function App() {
                   <a key={it.name} href={it.href} target="_blank" rel="noopener noreferrer"
                      className="animate-on-scroll group flex flex-col rounded-2xl border border-line bg-raise p-7 transition hover:border-brand-yellow/60">
                     <div className="flex items-start justify-between gap-4">
-                      <h4 className="text-2xl font-extrabold uppercase tracking-tight">{it.name}</h4>
+                      {it.logo ? (
+                        <h4 className="flex min-h-12 flex-col justify-center gap-2">
+                          <img src={`${base}logos/${it.logo}`} alt={it.name} className={`${it.logoH || 'h-9'} w-auto self-start object-contain`} />
+                          {it.sub && <span className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-yellow">{it.sub}</span>}
+                        </h4>
+                      ) : (
+                        <h4 className="text-2xl font-extrabold uppercase tracking-tight">{it.name}</h4>
+                      )}
                       <ArrowUpRight className="h-6 w-6 shrink-0 text-brand-gray transition group-hover:text-brand-yellow" />
                     </div>
                     <p className="mt-3 flex items-center gap-2 text-[13.5px] font-semibold text-brand-yellow">
