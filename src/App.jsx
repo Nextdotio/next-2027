@@ -18,6 +18,7 @@ const STATS = [
   ['~40k', 'LinkedIn followers'],
   ['~16k', 'Newsletter subscribers'],
   ['5/5', 'Sold-out NEXT Summits'],
+  ['+69', 'Partner NPS, Valletta 2026'],
   ['6', 'Network sites in 2027'],
 ]
 
@@ -273,7 +274,7 @@ export default function App() {
               Talk to the team
             </a>
           </div>
-          <dl className="hero-rise hero-d4 mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-5">
+          <dl className="hero-rise hero-d4 mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3 lg:grid-cols-6">
             {STATS.map(([v, l]) => (
               <div key={l} className="bg-raise px-5 py-5">
                 <dt className="order-2 mt-1 block text-[11.5px] font-semibold uppercase tracking-[0.14em] text-brand-gray">{l}</dt>

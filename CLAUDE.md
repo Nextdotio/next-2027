@@ -33,9 +33,9 @@ Confirm it prints `Published` before reporting done. Publishes to
   figures already public on the linked cards (HR from €2,500, marketingNEXT
   €4,000). The rate cards are the source of truth - this page only links.
 - **Every claim is lifted from a live sibling site** (215k+ pageviews, ~40k
-  LinkedIn, ~16k subscribers, 5/5 sold-out, 2,000 executives, dates and
-  venues). If a sibling card changes a claim, change it here too - never let
-  the hub run ahead of the cards.
+  LinkedIn, ~16k subscribers, 5/5 sold-out, +69 partner NPS from the Valletta
+  card, 2,000 executives, dates and venues). If a sibling card changes a
+  claim, change it here too - never let the hub run ahead of the cards.
 - Internal material (targets, sell-through, comp policy, deal terms) never
   appears here. Neither does `pragmatic.html` or any client-specific page.
 
