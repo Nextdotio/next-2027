@@ -256,7 +256,8 @@ export default function App() {
         <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 h-[520px] w-[520px] rounded-full bg-brand-yellow/[0.05] blur-3xl" />
         <div className="mx-auto max-w-7xl">
           <p className="hero-rise hero-d1 text-[12px] font-black uppercase tracking-[0.26em] text-brand-yellow">
-            NEXT.io · NEXTPredict · The 2027 commercial portfolio
+            {/* Brand names keep their own casing inside this uppercase eyebrow. */}
+            <span className="normal-case">NEXT.io</span> · <span className="normal-case">NEXTPredict</span> · The 2027 commercial portfolio
           </p>
           <h1 className="hero-rise hero-d2 mt-6 max-w-5xl text-5xl font-extrabold uppercase leading-[0.98] tracking-tight sm:text-7xl">
             Where iGaming<br />does business.
