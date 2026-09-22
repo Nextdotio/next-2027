@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  /* NEXT.io house system - the same tokens as the summit brochures */
+  --color-brand-dark: #242426;
+  --color-brand-yellow: #ffcf33;
+  --color-brand-white: #ffffff;
+  --color-brand-gray: #bdbdbd;
+  --color-ink: #1c1c1f;
+  --color-raise: #2c2c30;
+  --color-line: #3a3a3e;
+  --font-sans: 'Inter', 'Helvetica Neue', Arial, ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: #1c1c1f;
+    color: #ffffff;
+    font-family: 'Inter', 'Helvetica Neue', Arial, ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: #ffcf33; color: #242426; }
+  section[id] { scroll-margin-top: 5.5rem; }
+}
+
+@layer utilities {
+  .animate-on-scroll {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1);
+  }
+  .animate-on-scroll.visible { opacity: 1; transform: none; }
+
+  .hero-rise { opacity: 0; transform: translateY(30px); animation: heroRise .9s cubic-bezier(.2,.7,.3,1) forwards; }
+  .hero-d1 { animation-delay: .08s; }
+  .hero-d2 { animation-delay: .2s; }
+  .hero-d3 { animation-delay: .34s; }
+  .hero-d4 { animation-delay: .48s; }
+
+  /* brand walls: PNGs are pre-baked to structure-preserving white marks by
+     scripts/build_logos.py (luminance -> alpha), so they render unfiltered.
+     .logo-sil remains for the few flat SVG wordmarks only. */
+  .logo-baked { opacity: .85; }
+  .logo-sil {
+    filter: brightness(0) invert(1);
+    mix-blend-mode: screen;
+    opacity: .8;
+  }
+  .edge-fade-x {
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  }
+}
+
+@keyframes heroRise { to { opacity: 1; transform: none; } }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track { display: flex; width: max-content; animation: marquee var(--marquee-dur, 60s) linear infinite; }
+.marquee-track.reverse { animation-direction: reverse; }
+.marquee-track:hover { animation-play-state: paused; }
+
+/* film grain, very quiet */
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: .04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll { opacity: 1; transform: none; transition: none; }
+  .hero-rise { opacity: 1; transform: none; animation: none; }
+  .marquee-track { animation: none; }
+}
