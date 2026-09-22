@@ -17,7 +17,7 @@ npm run deploy   # = vite build && npx gh-pages -d dist
 ```
 
 Confirm it prints `Published` before reporting done. Publishes to
-`https://stuatnext.github.io/next-2027/` once Pages is enabled for this repo.
+`https://nextdotio.github.io/next-2027/` once Pages is enabled for this repo.
 
 ## Workflow
 

@@ -47,7 +47,7 @@ const PORTFOLIO = [
         when: '13-14 April 2027 · Convene 30 Hudson Yards',
         extra: 'Focus days 12 & 15 April: NEXT Focus Emerging Verticals and NEXTPredict',
         line: '2,000 senior executives across a four-day New York week. Sixth edition, five-for-five sold out.',
-        href: 'https://stuatnext.github.io/next-summit-new-york/',
+        href: 'https://nextdotio.github.io/next-summit-new-york/',
         cta: 'View the rate card',
       },
       {
@@ -56,7 +56,7 @@ const PORTFOLIO = [
         when: '26-27 May 2027 · Mediterranean Conference Centre, Malta',
         extra: 'iGaming IDOL gala, rooftop receptions and four focus events in the same week',
         line: 'The Mediterranean flagship, in the industry’s home town. The week the whole market attends.',
-        href: 'https://stuatnext.github.io/next-summit-valletta/',
+        href: 'https://nextdotio.github.io/next-summit-valletta/',
         cta: 'View the rate card',
       },
       {
@@ -65,7 +65,7 @@ const PORTFOLIO = [
         when: 'October 2027 · New York City',
         extra: 'Dates and venue announced shortly',
         line: 'The prediction markets event, from the platform that covers the category every day.',
-        href: 'https://stuatnext.github.io/next-predict-2027/',
+        href: 'https://nextdotio.github.io/next-predict-2027/',
         cta: 'View the rate card',
       },
       {
@@ -74,7 +74,7 @@ const PORTFOLIO = [
         when: 'Europe · Cyprus, 11-13 Oct — LatAm · Cancún, 15-17 Nov',
         extra: 'Invitation-only · 100 delegates per retreat · 50 operators, 50 suppliers',
         line: 'Three days and two nights of unhurried time with the decision-makers. Chatham House Rule.',
-        href: 'https://stuatnext.github.io/next-retreat-2027/',
+        href: 'https://nextdotio.github.io/next-retreat-2027/',
         cta: 'View the partner brochure',
       },
     ],
@@ -87,7 +87,7 @@ const PORTFOLIO = [
         when: 'NEXT.io + NEXTPredict · always-on',
         extra: 'Display, category ownership, newsletters, podcasts and Spotlight',
         line: 'The 2027 rate card for both platforms, with a plan builder and every format’s delivery data.',
-        href: 'https://stuatnext.github.io/next-media-pack-2027/',
+        href: 'https://nextdotio.github.io/next-media-pack-2027/',
         cta: 'Open the media pack',
       },
       {
@@ -95,7 +95,7 @@ const PORTFOLIO = [
         when: 'Private builds · your calendar',
         extra: 'Brief-led, priced on the room you want',
         line: 'Your own event, built by the team behind the summits: venue, production, guest list, delivery.',
-        href: 'https://stuatnext.github.io/next-external-projects-2027/',
+        href: 'https://nextdotio.github.io/next-external-projects-2027/',
         cta: 'See the formats',
       },
     ],
@@ -109,7 +109,7 @@ const PORTFOLIO = [
         when: 'Malta · annual membership',
         extra: 'Supported by GamingMalta',
         line: 'The HR community for iGaming: benchmarking, mentors, workshops and dinners. From €2,500 a year.',
-        href: 'https://stuatnext.github.io/hr-connect-2027/',
+        href: 'https://nextdotio.github.io/hr-connect-2027/',
         cta: 'View membership',
       },
       {
@@ -118,7 +118,7 @@ const PORTFOLIO = [
         when: 'Virtual · monthly surgery',
         extra: 'Invitation-only, two seats per company',
         line: 'The peer-led marketing surgery for senior iGaming marketers. €4,000 a year, by application.',
-        href: 'https://stuatnext.github.io/next-community-2027/',
+        href: 'https://nextdotio.github.io/next-community-2027/',
         cta: 'View membership',
       },
     ],
@@ -306,7 +306,7 @@ export default function App() {
                     </li>
                   ))}
                 </ul>
-                <a href="https://stuatnext.github.io/next-media-pack-2027/" target="_blank" rel="noopener noreferrer"
+                <a href="https://nextdotio.github.io/next-media-pack-2027/" target="_blank" rel="noopener noreferrer"
                    className="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.13em] text-brand-yellow hover:brightness-110">
                   Media & advertising rate card <ArrowUpRight className="h-4 w-4" />
                 </a>
