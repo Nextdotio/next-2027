@@ -16,7 +16,7 @@ npm run build    # verify it compiles
 npm run deploy   # build + publish dist/ to gh-pages
 ```
 
-Live at https://stuatnext.github.io/next-2027/ once GitHub Pages is enabled
+Live at https://nextdotio.github.io/next-2027/ once GitHub Pages is enabled
 (Settings → Pages → deploy from `gh-pages`).
 
 Content rules — what this page may and may not say — are in `CLAUDE.md`.
