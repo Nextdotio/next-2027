@@ -52,20 +52,43 @@ Confirm it prints `Published` before reporting done. Publishes to
 
 ## The brand walls
 
-- `public/logos/{operators,partners,members}/` is a **merged, deduped copy**
-  of logo sets already public on the sibling sites: Valletta operators + NY
-  operators + retreat attendees (→ operators), Valletta + retreat partners
-  (→ partners), HR Connect members (→ members). `src/logos.js` is the
-  generated manifest (filenames + `TOTAL_BRANDS`); regenerate it if the
-  directories change.
-- Wall PNGs are pre-baked to structure-preserving white marks by
-  `scripts/build_logos.py`: luminance maps to opacity, so a white-on-colour
-  logo keeps its letterforms as cut-outs instead of flattening to a block
-  (the failure a plain CSS whiteout causes). Rerun the script after adding
-  logos - it overwrites in place; pristine sources stay in the sibling
-  repos. The handful of flat SVG wordmarks still use the `.logo-sil` CSS
-  whiteout. A few genuinely solid marks (flutter, island-luck) render as
-  solid shapes; that is their real silhouette.
+- The walls are built from `logo-src/{operators,partners,members}/`: a
+  **merged, deduped set of untouched (pristine) copies** of logo sets already
+  public on the sibling sites: Valletta operators + NY operators + retreat
+  attendees (→ operators), Valletta + retreat partners (→ partners), HR
+  Connect members (→ members). The retreat repo's own wall PNGs are already
+  baked, so its pristine files come from before its bake commit
+  (`ea7c4e4^` in next-retreat-2027). One file per brand per wall.
+  `public/logos/{operators,partners,members}/`, `src/logos.js` and
+  `src/logo-metrics.js` are build output - never edit them or copy files
+  into them by hand.
+- `python3 scripts/build_logos.py` (numpy + Pillow) builds all of it. It
+  bakes each PNG to a structure-preserving white mark: luminance maps to
+  opacity, so a white-on-colour logo keeps its letterforms as cut-outs
+  instead of flattening to a block (the failure a plain CSS whiteout
+  causes). It copies SVGs through, deletes wall files that have no source,
+  writes `src/logos.js`, then runs `scripts/logo_metrics.py`, which trims
+  each PNG to its content box and writes `src/logo-metrics.js` - the optical
+  sizes `wallSize()` in App.jsx reads (safe to run on its own too). The
+  build only ever reads `logo-src`, so it is idempotent: a rerun rewrites
+  nothing and can never re-bake an already baked mark. To add a logo, drop
+  the untouched source into `logo-src/<wall>/` and rerun.
+- Where the automatic polarity drops part of a mark, the script's
+  `TREATMENT` map sets it per file: `shape` for multi-colour marks that
+  lose their wordmark or emblem (BetMGM, highbet, Golden Whale...), `plate`
+  for logos printed on a solid plate (Finnplay, VallettaPay, The Playa,
+  Casino Guru Awards, maxbet), `dark` for logos flattened onto a white
+  canvas. Check a contact sheet after adding logos. The handful of flat SVG
+  wordmarks still use the `.logo-sil` CSS whiteout. A few genuinely solid
+  marks (flutter, island-luck) render as solid shapes; that is their real
+  silhouette.
+- `TOTAL_BRANDS` (the "N brands, from 2026 alone" headline) counts unique
+  brands across the three walls, not files: filenames are normalised (case
+  and punctuation dropped, so `l-l-europe` = `ll-europe`) and `ALIASES` in
+  the script folds the remaining spellings of one brand together (`l-l` =
+  L&L Europe, `glitnor-group` = `glitnor`, `pressenter-group` =
+  `pressenter`), so a brand shown on two walls counts once. The build stops
+  with an error if one wall holds the same brand twice.
 - NEXT.io / NEXTPredict brand logos live in `public/logos/brand/`, alongside
   the property lockups (summit-valletta, next-retreat, hrconnect,
   marketingnext) copied from the sibling repos. Portfolio cards render the
