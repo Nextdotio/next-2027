@@ -260,10 +260,10 @@ export default function App() {
             <span className="normal-case">NEXT.io</span> · <span className="normal-case">NEXTPredict</span> · The 2027 commercial portfolio
           </p>
           <h1 className="hero-rise hero-d2 mt-6 max-w-5xl text-5xl font-extrabold uppercase leading-[0.98] tracking-tight sm:text-7xl">
-            Where iGaming<br />does business.
+            Where businesses<br />launch and grow.
           </h1>
           <p className="hero-rise hero-d3 mt-7 max-w-2xl text-lg leading-relaxed text-brand-gray sm:text-xl">
-            Two media platforms read daily by the industry. Three flagship events and two
+            Two media platforms your buyers read every day. Three flagship events and two
             invitation-only retreats. The communities in between. One commercial team,
             and every 2027 rate card one click away.
           </p>
@@ -292,7 +292,7 @@ export default function App() {
           <SectionHead
             eyebrow="The platforms"
             title={<>Two newsrooms. <span className="text-brand-yellow">One audience that matters.</span></>}
-            lead="Everything in the portfolio stands on the media: the sites, newsletters and shows the industry actually reads and watches. Partner brands live inside that habit all year."
+            lead="Everything in the portfolio stands on the media: the sites, newsletters and shows your buyers actually read and watch. Partner brands live inside that habit all year."
           />
           <div className="mt-12 grid gap-6 lg:grid-cols-2">
             {PLATFORMS.map((pl) => (
@@ -442,7 +442,7 @@ export default function App() {
               <img src={`${base}logos/brand/nextpredict-logo.png`} alt="NEXTPredict" className="h-6 w-auto" />
             </div>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-brand-gray">
-              Media, events and communities for the iGaming industry.
+              Media, events and communities that help businesses launch and grow.
               Prices and availability live on each rate card.
             </p>
           </div>

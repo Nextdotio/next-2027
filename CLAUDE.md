@@ -29,6 +29,15 @@ Confirm it prints `Published` before reporting done. Publishes to
 
 ## Content rules
 
+- **Prediction markets are never in the same sentence as gambling or iGaming**
+  (Stuart, 22 Sep 2026). This hub covers NEXT.io and NEXTPredict together, so
+  portfolio-wide copy (hero, footer, meta description, section leads) never
+  labels the audience as iGaming, and does not fall back on "the industry"
+  either (Stuart: "what industry?"). It sells the value instead: media and
+  events that help businesses launch and grow, read by "your buyers".
+  Product-specific lines may still say iGaming when they describe an
+  iGaming-only product (the NEXT.io platform card, HR Connect, marketingNEXT,
+  the Valletta gala and home-town lines).
 - **This page carries no prices and no availability** beyond the entry-level
   figures already public on the linked cards (HR from €2,500, marketingNEXT
   €4,000). The rate cards are the source of truth - this page only links.
