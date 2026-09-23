@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import {
-  ArrowRight, ArrowUpRight, CalendarDays, Globe, Mail, MapPin, Menu, X,
-  Newspaper, TrendingUp, Users, Handshake, Layers, Crown,
+  ArrowRight, ArrowUpRight, Globe, Mail, Menu, X,
+  TrendingUp, Handshake, Layers, Crown,
 } from 'lucide-react'
 import { OPERATORS, PARTNERS, MEMBERS, TOTAL_BRANDS } from './logos.js'
+import { LOGO_METRICS } from './logo-metrics.js'
 
 /* ────────────────────────────────────────────────────────────────────────────
    CONTENT — the page reads from these arrays. Edit here, not in the markup.
@@ -37,6 +38,10 @@ const PLATFORMS = [
   },
 ]
 
+// Events carry `dates`: one leg per event (a retreat card has two), each shown
+// as a dated tile beside its venue - never as a run-on line. `days` is the day
+// range; leave it out when only the month is fixed and the tile leads with the
+// month instead. `extra` is the card's one supporting line.
 const PORTFOLIO = [
   {
     group: 'Events',
@@ -44,7 +49,7 @@ const PORTFOLIO = [
       {
         name: 'NEXT Summit New York',
         logo: 'brand/next-logo.png', logoH: 'h-8', sub: 'Summit · New York',
-        when: '13-14 April 2027 · Convene 30 Hudson Yards',
+        dates: [{ days: '13-14', month: 'Apr', year: '2027', place: 'Convene 30 Hudson Yards' }],
         extra: 'Focus days 12 & 15 April: NEXT Focus Emerging Verticals and NEXTPredict',
         line: '2,000 senior executives across a four-day New York week. Sixth edition, five-for-five sold out.',
         href: 'https://nextdotio.github.io/next-summit-new-york/',
@@ -53,7 +58,7 @@ const PORTFOLIO = [
       {
         name: 'NEXT Summit Valletta',
         logo: 'brand/summit-valletta.png', logoH: 'h-12',
-        when: '26-27 May 2027 · Mediterranean Conference Centre, Malta',
+        dates: [{ days: '26-27', month: 'May', year: '2027', place: 'Mediterranean Conference Centre, Malta' }],
         extra: 'iGaming IDOL gala, rooftop receptions and four focus events in the same week',
         line: 'The Mediterranean flagship, in the industry’s home town. The week the whole market attends.',
         href: 'https://nextdotio.github.io/next-summit-valletta/',
@@ -62,7 +67,7 @@ const PORTFOLIO = [
       {
         name: 'NEXTPredict Summit',
         logo: 'brand/nextpredict-logo.png', logoH: 'h-7', sub: 'Summit · October 2027',
-        when: 'October 2027 · New York City',
+        dates: [{ month: 'Oct', year: '2027', place: 'New York City' }],
         extra: 'Dates and venue announced shortly',
         line: 'The prediction markets event, from the platform that covers the category every day.',
         href: 'https://nextdotio.github.io/next-predict-2027/',
@@ -71,7 +76,10 @@ const PORTFOLIO = [
       {
         name: 'NEXT Retreats',
         logo: 'brand/next-retreat.png', logoH: 'h-12',
-        when: 'Europe · Cyprus, 11-13 Oct — LatAm · Cancún, 15-17 Nov',
+        dates: [
+          { days: '11-13', month: 'Oct', year: '2027', region: 'Europe', place: 'Cyprus' },
+          { days: '15-17', month: 'Nov', year: '2027', region: 'LatAm', place: 'Cancún' },
+        ],
         extra: 'Invitation-only · 100 delegates per retreat · 50 operators, 50 suppliers',
         line: 'Three days and two nights of unhurried time with the decision-makers. Chatham House Rule.',
         href: 'https://nextdotio.github.io/next-retreat-2027/',
@@ -187,14 +195,86 @@ function SectionHead({ eyebrow, title, lead }) {
   )
 }
 
+// Brand names keep their own casing inside uppercase labels.
+const BRANDS = /(NEXT\.io|NEXTPredict)/
+function brandCase(text) {
+  return text.split(BRANDS).map((part, i) => (BRANDS.test(part) ? <span key={i} className="normal-case">{part}</span> : part))
+}
+
+// One dated tile per event leg: the day range leads, month and year sit under
+// it. With no day range yet the month leads and the year sits under it.
+function DateTile({ days, month, year }) {
+  return (
+    <span className="flex w-[5.5rem] shrink-0 flex-col items-center rounded-xl border border-line bg-ink px-2 py-3 text-center">
+      <span className="text-[22px] font-extrabold leading-none tracking-tight tabular-nums text-brand-white">
+        {days ? days.replace('-', '–') : month}
+      </span>{' '}
+      <span className="mt-2 text-[10.5px] font-bold uppercase leading-none tracking-[0.16em] text-brand-yellow tabular-nums">
+        {days ? `${month} ${year}` : year}
+      </span>
+    </span>
+  )
+}
+
+// Every event card reads the same way: its dated legs (the retreats have two,
+// side by side where the card is wide enough), then the supporting line.
+function Schedule({ dates, extra }) {
+  return (
+    <div className="mt-5">
+      <ul className={`grid gap-3 ${dates.length > 1 ? 'sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2' : ''}`}>
+        {dates.map((d) => (
+          <li key={d.place} className="flex items-center gap-4">
+            <DateTile {...d} />{' '}
+            <div className="min-w-0">
+              {d.region && <p className="text-[11px] font-black uppercase tracking-[0.22em] text-brand-gray">{d.region}</p>}{' '}
+              <p className="font-semibold leading-snug text-brand-white">{d.place}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+      {extra && <p className="mt-3 text-[13px] leading-snug text-brand-gray">{extra}</p>}
+    </div>
+  )
+}
+
+/* Optical sizing for the brand walls: every mark gets about the same visual
+   weight instead of the same max-height. Area is held near-constant, so a 12:1
+   wordmark is not a sliver and a square badge is not a stamp; heavy solid marks
+   give a little back and hairline marks get a little more; small raster sources
+   are never blown up past 1.6x, where they would go soft. Sizes are desktop px,
+   scaled down on phones by --wall-scale. Metrics come from
+   scripts/logo_metrics.py; a file missing from them keeps the old fixed cap. */
+const WALL = { area: 4600, maxH: 50, maxW: 172, ink: 0.28, upscale: 1.6 }
+function wallSize(dir, file) {
+  const m = LOGO_METRICS[`${dir}/${file}`]
+  if (!m) return null
+  const [w, h, ink] = m
+  const ratio = w / h
+  const weight = Math.min(1.4, Math.max(0.7, Math.sqrt(WALL.ink / ink)))
+  let H = Math.min(Math.sqrt((WALL.area * weight) / ratio), WALL.maxH)
+  let W = H * ratio
+  if (W > WALL.maxW) { W = WALL.maxW; H = W / ratio }
+  if (!file.endsWith('.svg')) { const s = Math.min(1, (w * WALL.upscale) / W); W *= s; H *= s }
+  return [Math.round(W), Math.round(H)]
+}
+
+function WallLogo({ dir, file }) {
+  const src = `${base}logos/${dir}/${file}`
+  const tone = file.endsWith('.svg') ? 'logo-sil' : 'logo-baked'
+  const size = wallSize(dir, file)
+  if (!size) return <img src={src} alt="" loading="lazy" className={`${tone} max-h-9 w-auto max-w-36 object-contain sm:max-h-11`} />
+  const [w, h] = size
+  return <img src={src} alt="" loading="lazy" width={w} height={h} className={`${tone} wall-logo`} style={{ '--w': `${w}px`, '--h': `${h}px` }} />
+}
+
 function Marquee({ files, dir, reverse = false, dur = 70 }) {
   const row = files.map((f) => (
-    <div key={f} className="flex h-16 w-40 shrink-0 items-center justify-center px-6 sm:h-20 sm:w-48">
-      <img src={`${base}logos/${dir}/${f}`} alt="" loading="lazy" className={`${f.endsWith('.svg') ? 'logo-sil' : 'logo-baked'} max-h-9 max-w-full object-contain sm:max-h-11`} />
+    <div key={f} className="flex h-16 shrink-0 items-center px-5 sm:h-20 sm:px-7">
+      <WallLogo dir={dir} file={f} />
     </div>
   ))
   return (
-    <div className="edge-fade-x overflow-hidden">
+    <div className="logo-wall edge-fade-x overflow-hidden">
       <div className={`marquee-track ${reverse ? 'reverse' : ''}`} style={{ '--marquee-dur': `${dur}s` }}>
         <div className="flex">{row}</div>
         <div className="flex" aria-hidden>{row}</div>
@@ -221,15 +301,16 @@ export default function App() {
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5">
           <a href="#top" className="flex items-center gap-3">
             <img src={`${base}logos/brand/next-logo.png`} alt="NEXT.io" className="h-7 w-auto" />
-            <span className="hidden rounded-full border border-line px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-gray sm:inline">2027 portfolio</span>
+            {/* the pill steps aside between lg and xl, where the full nav needs the room */}
+            <span className="hidden whitespace-nowrap rounded-full border border-line px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-gray sm:inline lg:hidden xl:inline">2027 portfolio</span>
           </a>
-          <nav className="hidden items-center gap-7 lg:flex">
+          <nav className="hidden items-center gap-5 lg:flex xl:gap-7">
             {NAV.map(([id, label]) => (
-              <a key={id} href={`#${id}`} className="text-[13px] font-semibold uppercase tracking-[0.13em] text-brand-gray transition hover:text-brand-yellow">
+              <a key={id} href={`#${id}`} className="whitespace-nowrap text-[13px] font-semibold uppercase tracking-[0.13em] text-brand-gray transition hover:text-brand-yellow">
                 {label}
               </a>
             ))}
-            <a href={`mailto:${CONTACT}`} className="inline-flex items-center gap-2 rounded-full bg-brand-yellow px-5 py-2.5 text-[13px] font-bold uppercase tracking-[0.13em] text-brand-dark transition hover:brightness-110">
+            <a href={`mailto:${CONTACT}`} className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-brand-yellow px-5 py-2.5 text-[13px] font-bold uppercase tracking-[0.13em] text-brand-dark transition hover:brightness-110">
               Contact sales <ArrowUpRight className="h-4 w-4" />
             </a>
           </nav>
@@ -267,19 +348,20 @@ export default function App() {
             invitation-only retreats. The communities in between. One commercial team,
             and every 2027 rate card one click away.
           </p>
-          <div className="hero-rise hero-d4 mt-9 flex flex-wrap items-center gap-4">
-            <a href="#portfolio" className="inline-flex items-center gap-2 rounded-full bg-brand-yellow px-7 py-3.5 text-sm font-bold uppercase tracking-[0.13em] text-brand-dark transition hover:brightness-110">
+          <div className="hero-rise hero-d4 mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+            <a href="#portfolio" className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-yellow px-7 py-3.5 text-sm font-bold uppercase tracking-[0.13em] text-brand-dark transition hover:brightness-110">
               Explore the portfolio <ArrowRight className="h-4 w-4" />
             </a>
-            <a href={`mailto:${CONTACT}`} className="inline-flex items-center gap-2 rounded-full border border-brand-white/30 px-7 py-3.5 text-sm font-bold uppercase tracking-[0.13em] text-brand-white transition hover:border-brand-yellow hover:text-brand-yellow">
+            <a href={`mailto:${CONTACT}`} className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-white/30 px-7 py-3.5 text-sm font-bold uppercase tracking-[0.13em] text-brand-white transition hover:border-brand-yellow hover:text-brand-yellow">
               Talk to the team
             </a>
           </div>
+          {/* dt stays first in the markup for screen readers; flex order puts the figure on top so every figure shares one line */}
           <dl className="hero-rise hero-d4 mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3 lg:grid-cols-6">
             {STATS.map(([v, l]) => (
-              <div key={l} className="bg-raise px-5 py-5">
-                <dt className="order-2 mt-1 block text-[11.5px] font-semibold uppercase tracking-[0.14em] text-brand-gray">{l}</dt>
-                <dd className="order-1 text-3xl font-extrabold text-brand-yellow">{v}</dd>
+              <div key={l} className="flex flex-col bg-raise px-5 py-5">
+                <dt className="order-2 mt-2.5 text-[11.5px] font-semibold uppercase leading-snug tracking-[0.14em] text-brand-gray">{brandCase(l)}</dt>
+                <dd className="order-1 text-3xl font-extrabold leading-none tabular-nums text-brand-yellow">{v}</dd>
               </div>
             ))}
           </dl>
@@ -306,13 +388,14 @@ export default function App() {
                     </li>
                   ))}
                 </ul>
-                <a href="https://nextdotio.github.io/next-media-pack-2027/" target="_blank" rel="noopener noreferrer"
-                   className="mt-6 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.13em] text-brand-yellow hover:brightness-110">
-                  Media & advertising rate card <ArrowUpRight className="h-4 w-4" />
-                </a>
               </div>
             ))}
           </div>
+          {/* One rate card covers both platforms, so the link is shown once, under the pair */}
+          <a href="https://nextdotio.github.io/next-media-pack-2027/" target="_blank" rel="noopener noreferrer"
+             className="animate-on-scroll mt-8 inline-block text-sm font-bold uppercase tracking-[0.13em] text-brand-yellow hover:brightness-110">
+            Media & advertising rate card<ArrowUpRight className="ml-2 inline-block h-4 w-4 align-[-3px]" />
+          </a>
         </div>
       </section>
 
@@ -336,7 +419,7 @@ export default function App() {
                      className="animate-on-scroll group flex flex-col rounded-2xl border border-line bg-raise p-7 transition hover:border-brand-yellow/60">
                     <div className="flex items-start justify-between gap-4">
                       {it.logo ? (
-                        <h4 className="flex min-h-12 flex-col justify-center gap-2">
+                        <h4 className="flex min-h-14 flex-col gap-2">
                           <img src={`${base}logos/${it.logo}`} alt={it.name} className={`${it.logoH || 'h-9'} w-auto self-start object-contain`} />
                           {it.sub && <span className="text-[11px] font-black uppercase tracking-[0.3em] text-brand-yellow">{it.sub}</span>}
                         </h4>
@@ -345,17 +428,17 @@ export default function App() {
                       )}
                       <ArrowUpRight className="h-6 w-6 shrink-0 text-brand-gray transition group-hover:text-brand-yellow" />
                     </div>
-                    <p className="mt-3 flex items-center gap-2 text-[13.5px] font-semibold text-brand-yellow">
-                      <CalendarDays className="h-4 w-4 shrink-0" /> {it.when}
-                    </p>
-                    {it.extra && (
-                      <p className="mt-1.5 flex items-center gap-2 text-[13px] text-brand-gray">
-                        <MapPin className="h-4 w-4 shrink-0" /> {it.extra}
-                      </p>
+                    {it.dates ? (
+                      <Schedule dates={it.dates} extra={it.extra} />
+                    ) : (
+                      <div className="mt-3">
+                        <p className="text-[13.5px] font-semibold text-brand-yellow">{it.when}</p>
+                        {it.extra && <p className="mt-1 text-[13px] leading-snug text-brand-gray">{it.extra}</p>}
+                      </div>
                     )}
-                    <p className="mt-4 leading-relaxed text-brand-white/85">{it.line}</p>
-                    <span className="mt-5 inline-flex items-center gap-2 text-sm font-bold uppercase tracking-[0.13em] text-brand-yellow">
-                      {it.cta} <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                    <p className="mt-5 leading-relaxed text-brand-white/85">{it.line}</p>
+                    <span className="mt-auto pt-6 text-sm font-bold uppercase tracking-[0.13em] text-brand-yellow">
+                      {it.cta}<ArrowRight className="ml-2 inline-block h-4 w-4 align-[-3px] transition group-hover:translate-x-1" />
                     </span>
                   </a>
                 ))}
@@ -395,17 +478,17 @@ export default function App() {
         </div>
         <div className="mx-auto mt-12 max-w-[1600px] space-y-8">
           <div className="animate-on-scroll space-y-3">
-            <p className="mx-auto max-w-7xl px-1 text-[11.5px] font-black uppercase tracking-[0.22em] text-brand-gray">{WALLS[0].label}</p>
+            <p className="mx-auto max-w-7xl text-[11.5px] font-black uppercase tracking-[0.22em] text-brand-gray">{WALLS[0].label}</p>
             <Marquee files={WALLS[0].files.slice(0, opsHalf)} dir={WALLS[0].dir} dur={150} />
             <Marquee files={WALLS[0].files.slice(opsHalf)} dir={WALLS[0].dir} dur={165} reverse />
           </div>
           <div className="animate-on-scroll space-y-3">
-            <p className="mx-auto max-w-7xl px-1 text-[11.5px] font-black uppercase tracking-[0.22em] text-brand-gray">{WALLS[1].label}</p>
+            <p className="mx-auto max-w-7xl text-[11.5px] font-black uppercase tracking-[0.22em] text-brand-gray">{WALLS[1].label}</p>
             <Marquee files={WALLS[1].files.slice(0, partnersHalf)} dir={WALLS[1].dir} dur={140} />
             <Marquee files={WALLS[1].files.slice(partnersHalf)} dir={WALLS[1].dir} dur={155} reverse />
           </div>
           <div className="animate-on-scroll space-y-3">
-            <p className="mx-auto max-w-7xl px-1 text-[11.5px] font-black uppercase tracking-[0.22em] text-brand-gray">{WALLS[2].label}</p>
+            <p className="mx-auto max-w-7xl text-[11.5px] font-black uppercase tracking-[0.22em] text-brand-gray">{WALLS[2].label}</p>
             <Marquee files={WALLS[2].files} dir={WALLS[2].dir} dur={110} />
           </div>
         </div>
@@ -413,7 +496,7 @@ export default function App() {
 
       {/* ── CTA ─────────────────────────────────────────────────────────── */}
       <section className="px-5 py-24">
-        <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-brand-yellow/30 bg-gradient-to-r from-brand-yellow/10 to-brand-white/5 p-10 text-center sm:p-16">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-brand-yellow/30 bg-gradient-to-r from-brand-yellow/10 to-brand-white/5 px-5 py-10 text-center sm:p-16">
           <h2 className="animate-on-scroll mx-auto max-w-3xl text-4xl font-extrabold uppercase leading-[1.02] tracking-tight sm:text-5xl">
             One conversation covers <span className="text-brand-yellow">the whole year.</span>
           </h2>
@@ -421,12 +504,12 @@ export default function App() {
             Tell us the markets you want and the buyers you need in front of you.
             We will bring back one plan across media, events and communities.
           </p>
-          <div className="animate-on-scroll mt-9 flex flex-wrap items-center justify-center gap-4">
+          <div className="animate-on-scroll mx-auto mt-9 flex max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4">
             <a href={`mailto:${CONTACT}?subject=${encodeURIComponent('2027 partnership conversation')}`}
-               className="inline-flex items-center gap-2 rounded-full bg-brand-yellow px-8 py-4 text-sm font-bold uppercase tracking-[0.13em] text-brand-dark transition hover:brightness-110">
+               className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-yellow px-5 py-4 text-sm font-bold uppercase tracking-[0.13em] text-brand-dark transition hover:brightness-110 sm:px-8">
               <Mail className="h-4 w-4" /> {CONTACT}
             </a>
-            <a href="#portfolio" className="inline-flex items-center gap-2 rounded-full border border-brand-white/30 px-8 py-4 text-sm font-bold uppercase tracking-[0.13em] transition hover:border-brand-yellow hover:text-brand-yellow">
+            <a href="#portfolio" className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-white/30 px-5 py-4 text-sm font-bold uppercase tracking-[0.13em] transition hover:border-brand-yellow hover:text-brand-yellow sm:px-8">
               Back to the rate cards
             </a>
           </div>
@@ -437,7 +520,7 @@ export default function App() {
       <footer className="border-t border-line px-5 py-12">
         <div className="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-6">
           <div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
               <img src={`${base}logos/brand/next-logo.png`} alt="NEXT.io" className="h-7 w-auto" />
               <img src={`${base}logos/brand/nextpredict-logo.png`} alt="NEXTPredict" className="h-6 w-auto" />
             </div>
