@@ -21,11 +21,13 @@ Confirm it prints `Published` before reporting done. Publishes to
 
 ## Workflow
 
-- Develop on branch `claude/2027-ticket-pricing-brochure-p79mqg`.
+- Develop on `main`. It became the source of truth on 22 Sep 2026, when the
+  working branch `claude/2027-ticket-pricing-brochure-p79mqg` was merged in
+  (PR #1). That branch is retired; do not develop on it or deploy from it.
 - Run `npm run build` to verify changes compile.
 - Redeploy gh-pages (see above).
-- Commit with a clear message and push the branch.
-- Open a fresh PR into `main` only when asked.
+- Commit with a clear message and push `main`. No PR is needed unless
+  someone asks for a review first.
 
 ## Content rules
 
