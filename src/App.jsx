@@ -405,7 +405,7 @@ export default function App() {
           <SectionHead
             eyebrow="The 2027 portfolio"
             title={<>Every rate card, <span className="text-brand-yellow">one click away.</span></>}
-            lead="Eight live brochures across events, media and communities. Prices, availability and deliverables are maintained on the cards themselves - quote from the live pages only."
+            lead="Eight live brochures across events, media and communities, each with its own prices, dates and deliverables."
           />
           {PORTFOLIO.map(({ group, items }) => (
             <div key={group} className="mt-12">
