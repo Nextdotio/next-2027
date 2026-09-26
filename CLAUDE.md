@@ -96,3 +96,87 @@ Confirm it prints `Published` before reporting done. Publishes to
   on the item); New York and the NEXTPredict Summit compose the platform
   logo with a tracked sub-line because no dedicated lockup exists. Media &
   Advertising and External Projects have no mark and stay as text.
+
+## Present mode and seller tools (26 Sep 2026)
+
+Stuart asked for every brochure to be easy for a seller to walk a buyer
+through on a screen share. This page now has a full-screen deck and a
+shareable link on every portfolio card.
+
+- **The deck.** `src/PresentMode.jsx` is the shared reference component:
+  its behaviour (URL, keys, swipe, focus, scroll lock, reduced motion, the
+  slide list) is identical across the NEXT.io brochures, and only its classes
+  are this page's tokens. Do not fork the behaviour here; change the
+  reference and every brochure together.
+- **Where the slides come from.** `SLIDES` in `src/App.jsx` is built from
+  the content arrays, so a new portfolio item, stat, platform or reason
+  appears in the deck on the next build with no deck edit. Section headings
+  and leads live once in `COPY` and are read by the page and the deck alike.
+  The composition is 17 slides: cover (both logos, the hero title and lede,
+  "In this presentation" from `CONTENTS` with counts, and the only hint,
+  "Use the arrow keys, or swipe") · the numbers (`STATS`) · the platforms
+  (`PLATFORMS` and the media pack link) · for each `PORTFOLIO` group, a group
+  slide (its items as buttons with their dates or `when` line) and then one
+  slide per item, in page order (Events 4, Media 2, Communities 2) · why
+  NEXT (`WHY`) · who's in the room (`TOTAL_BRANDS` and one marquee strip per
+  wall, from the existing `WALLS` data) · next steps (`CONTACT` mailto and
+  every rate card link).
+- **Item slides** show the card's own lockup (`Lockup`), line, dates and
+  venue (`Schedule`) or `when` and `extra` (`ItemMeta`), through the same
+  components the card uses. Actions: "Open the rate card" (the sibling site,
+  new tab), Copy link, and "Show on the page" (closes the deck, lands and
+  marks the card). There is no price element: this page carries no prices
+  beyond the two entry figures already inside the HR Connect and
+  marketingNEXT lines.
+- **URL parameters.** `?present` opens the cover; `?present=<slide id>`
+  opens that slide. Slide ids: `cover`, `numbers`, `platforms`, `events`,
+  `media`, `communities`, `why`, `room`, `next-steps`, and `p-<slug>` for an
+  item, which is also its card's anchor (`#p-next-summit-new-york`,
+  `#p-hr-connect`...). Groups are anchors too (`#events`, `#media`,
+  `#communities`). The slug comes from `name`, so renaming an item changes
+  its anchor and slide id, and links already sent stop landing on it.
+- **Keys.** → Space PageDown next, ← PageUp back, Home and End, G the slide
+  list, Esc closes the list first and then the deck (the address bar loses
+  `present`). Swipe left or right on touch. Back to an address without
+  `present` closes the deck.
+- **Entry points.** The nav Present button (labelled at md and from xl; an
+  icon button with `aria-label="Present"` between lg and xl, where the full
+  nav fills the bar, which is also why the "2027 portfolio" pill now shows
+  from sm to lg only), Present in the phone menu, "Present the portfolio" in
+  the portfolio head (opens on the Events slide), and a quiet Present on
+  every card (opens on that item). Closing returns focus to whatever opened
+  the deck, or to the visible Present control when it was opened from the
+  address bar or the phone menu.
+- **Copy link** (`CopyLinkButton`) sits on every card and item slide and
+  copies this page plus `#p-<slug>`, never `present`. First-load deep links
+  are landed by `useLandOnHash` after render and again while Inter settles,
+  and a landed card is marked for a moment.
+- **Cards** are an `<article>` whose CTA link stretches over the whole card
+  (`.card-link`); Present and Copy link sit above that link. Never nest a
+  control inside an anchor.
+- **Anchors land by measurement.** App measures the header bar into `--nav-h`
+  (ResizeObserver); `section[id]`, `.jump-card` and `.jump-group` use it as
+  `scroll-margin-top`. Never hardcode a nav offset.
+- **No goal chips and no plan link here.** No portfolio item carries goal
+  tags, and the page has no plan builder to share.
+
+Rules every future edit must keep:
+
+- Slides read the arrays, `COPY` and the card components. Never re-type a
+  figure, a date or a claim onto a slide, and never add one the page does
+  not already carry. Every portfolio item appears in the deck exactly once.
+- Portfolio-wide deck copy (cover, group slides, labels, hints) follows the
+  page's own rule: no "iGaming", no "the industry", and prediction markets
+  never share a sentence with gambling or iGaming. Item slides show the
+  card's own words, so they say iGaming only where the card does.
+- Buyer-facing words only: the button is "Present"; the page never says
+  seller, sales desk, talk track, pitch, objection or close (in the sales
+  sense; the deck's and menu's Close buttons are fine). No em dashes in new
+  copy.
+- Inside any uppercase element (the deck's top bar and slide-list headings
+  included) brand names go through `brandCase` in `src/brand.jsx`, so they
+  read NEXT.io and NEXTPredict, never in capitals.
+- Minimum 44px touch targets, visible focus (the yellow `:focus-visible`
+  ring in `index.css`), and no horizontal scroll at 390px, on the page and
+  on every slide. QA: walk `?present` with ArrowRight at 390 and 1440 and
+  expect 17 slides.

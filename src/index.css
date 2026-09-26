@@ -21,7 +21,10 @@
     -webkit-font-smoothing: antialiased;
   }
   ::selection { background: #ffcf33; color: #242426; }
-  section[id] { scroll-margin-top: 5.5rem; }
+  /* anchors land under the fixed bar: App measures the bar into --nav-h
+     (ResizeObserver). Never hardcode a nav offset. */
+  section[id], .jump-card, .jump-group { scroll-margin-top: calc(var(--nav-h, 4rem) + 1.5rem); }
+  :focus-visible { outline: 2px solid #ffcf33; outline-offset: 2px; }
 }
 
 @layer utilities {
@@ -60,7 +63,24 @@
     mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
   }
+
+  /* portfolio cards: the CTA's link stretches over the whole card, and its
+     focus ring is drawn round the card; Present and Copy link sit above it */
+  .card-link::after { content: ''; position: absolute; inset: 0; border-radius: 1rem; }
+  .card-link:focus-visible { outline: none; }
+  .card-link:focus-visible::after { outline: 2px solid #ffcf33; outline-offset: 3px; }
+  /* a card opened from a shared link, or from "Show on the page", is marked for a moment */
+  .jump-card.is-landed { animation: land-ring 2.6s ease-out both; }
 }
+
+@keyframes land-ring {
+  0%, 60% { box-shadow: 0 0 0 2px #ffcf33, 0 0 48px rgba(255, 207, 51, .16); }
+  100% { box-shadow: 0 0 0 2px rgba(255, 207, 51, 0), 0 0 48px rgba(255, 207, 51, 0); }
+}
+
+/* Present mode: each slide slides in from the side it comes from */
+@keyframes pm-in-fwd { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+@keyframes pm-in-back { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
 
 @keyframes heroRise { to { opacity: 1; transform: none; } }
 
@@ -84,6 +104,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .jump-card.is-landed { animation: none; box-shadow: 0 0 0 2px #ffcf33; }
   .animate-on-scroll { opacity: 1; transform: none; transition: none; }
   .hero-rise { opacity: 1; transform: none; animation: none; }
   .marquee-track { animation: none; }
