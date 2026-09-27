@@ -54,7 +54,7 @@ const PORTFOLIO = [
         name: 'NEXT Summit New York',
         logo: 'brand/next-logo.png', logoH: 'h-8', sub: 'Summit · New York',
         dates: [{ days: '13-14', month: 'Apr', year: '2027', place: 'Convene 30 Hudson Yards' }],
-        extra: 'Focus days 12 & 15 April: NEXT Focus Emerging Verticals and NEXTPredict',
+        extra: 'Focus days 12 & 15 April: NEXT Focus Emerging Verticals and NEXTPredict Focus',
         line: '2,000 senior executives across a four-day New York week. Sixth edition, five-for-five sold out.',
         href: 'https://nextdotio.github.io/next-summit-new-york/',
         cta: 'View the rate card',
@@ -442,7 +442,7 @@ function PortfolioCard({ it, onPresent }) {
       <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-1 pt-6">
         <a href={it.href} target="_blank" rel="noopener noreferrer" className="card-link text-sm font-bold uppercase tracking-[0.13em] text-brand-yellow">
           {it.cta}<ArrowRight className="ml-2 inline-block h-4 w-4 align-[-3px] transition group-hover:translate-x-1" aria-hidden />
-          <span className="sr-only">: {it.name}, opens in a new tab</span>
+          <span className="sr-only normal-case">: {it.name}, opens in a new tab</span>
         </a>
         <div className="relative z-10 -mx-3 flex items-center">
           <button type="button" onClick={() => onPresent(id)}
