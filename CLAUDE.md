@@ -21,13 +21,16 @@ Confirm it prints `Published` before reporting done. Publishes to
 
 ## Workflow
 
-- Develop on `main`. It became the source of truth on 22 Sep 2026, when the
-  working branch `claude/2027-ticket-pricing-brochure-p79mqg` was merged in
-  (PR #1). That branch is retired; do not develop on it or deploy from it.
+- Develop on branch `claude/new-session-h6ajdg`: the live hub has been built
+  from it since 26 Sep 2026 (Present mode, card links, the pitch lines, the
+  NEXTPredict Focus rename). `main` was the source of truth from 22 Sep (PR #1,
+  which retired `claude/2027-ticket-pricing-brochure-p79mqg`) and now trails
+  it; never deploy from `main` until a PR brings it level. More than one
+  session works on this branch, so pull before every deploy.
 - Run `npm run build` to verify changes compile.
 - Redeploy gh-pages (see above).
-- Commit with a clear message and push `main`. No PR is needed unless
-  someone asks for a review first.
+- Commit with a clear message and push the branch. Open a PR into `main` only
+  when asked.
 
 ## Content rules
 
