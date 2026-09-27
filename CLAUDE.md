@@ -183,3 +183,25 @@ Rules every future edit must keep:
   ring in `index.css`), and no horizontal scroll at 390px, on the page and
   on every slide. QA: walk `?present` with ArrowRight at 390 and 1440 and
   expect 17 slides.
+
+## The hero: the 2027 map (27 Sep 2026)
+
+Stuart: "Make the hero designs more beautiful as well ... Etcetrra". The hub's
+first screen had an empty right half; it now carries the year on a map.
+
+- **`PortfolioMap`** (App.jsx) draws the North Atlantic and the Mediterranean
+  as a dot grid (`src/worldmap.js`: Natural Earth 1:50m land, public domain,
+  baked once into an 88 x 36 bitmap, so there is no map library) with a pin
+  per city and a dashed route between them. From lg it sits beside the
+  heading (the title steps down to 5xl at lg and 6xl from xl so it keeps two
+  lines); below lg it follows the buttons.
+- **It reads the cards, never its own copy.** `MAP_STOPS` walks every
+  `PORTFOLIO` item's `dates`, maps each `place` to a city through
+  `PLACE_CITY`, and labels the city with the months it hosts (New York: Apr
+  and Oct). The route joins the cities in the order of their first month:
+  it is the year, not an itinerary. A dated place missing from `PLACE_CITY`
+  is left off the map, so when a venue is announced or changes, add its city
+  (name, latitude, longitude, label side) there. No prices, no availability,
+  no city the cards do not name.
+- The pins pulse and the route's dashes flow; both hold still under reduced
+  motion. The map is `aria-hidden`: every city and month is on the cards.

@@ -7,6 +7,7 @@ import { OPERATORS, PARTNERS, MEMBERS, TOTAL_BRANDS } from './logos.js'
 import { LOGO_METRICS } from './logo-metrics.js'
 import { brandCase } from './brand.jsx'
 import { PresentMode, usePresent, CopyLinkButton } from './PresentMode.jsx'
+import { LAND, MAP, MAP_W, MAP_H, project } from './worldmap.js'
 
 /* ────────────────────────────────────────────────────────────────────────────
    CONTENT — the page reads from these arrays. Edit here, not in the markup.
@@ -456,6 +457,74 @@ function PortfolioCard({ it, onPresent }) {
   )
 }
 
+// ─── The 2027 map (hero) ────────────────────────────────────────────────────
+// Where the portfolio meets in 2027, read from PORTFOLIO's own dates: each
+// dated item's place maps to a city (PLACE_CITY), and each city shows the
+// months it hosts, in calendar order. The route joins the cities in the order
+// of their first month (it is the year, not an itinerary; New York's second
+// month shows on its label). A dated place missing from PLACE_CITY is left
+// off the map, so add its city when a new venue is announced. No prices, no
+// availability: only what the cards already say.
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const CITIES = {
+  nyc: { name: 'New York', lat: 40.71, lon: -74.01, label: 'right' },
+  mt: { name: 'Valletta', lat: 35.9, lon: 14.51, label: 'top' },
+  cy: { name: 'Cyprus', lat: 34.93, lon: 32.33, label: 'below-left' },
+  mx: { name: 'Cancún', lat: 21.16, lon: -86.85, label: 'right' },
+}
+const PLACE_CITY = {
+  'Convene 30 Hudson Yards': 'nyc', 'New York City': 'nyc',
+  'Mediterranean Conference Centre, Malta': 'mt', Cyprus: 'cy', 'Cancún': 'mx',
+}
+const MAP_STOPS = (() => {
+  const by = {}
+  for (const g of PORTFOLIO) for (const it of g.items) for (const d of it.dates || []) {
+    const city = PLACE_CITY[d.place]
+    if (city) (by[city] ||= new Set()).add(d.month)
+  }
+  return Object.entries(by).map(([id, set]) => {
+    const months = [...set].sort((a, b) => MONTHS.indexOf(a) - MONTHS.indexOf(b))
+    const [x, y] = project(CITIES[id].lat, CITIES[id].lon)
+    return { id, ...CITIES[id], months, first: MONTHS.indexOf(months[0]), x, y }
+  }).sort((a, b) => a.first - b.first)
+})()
+// eastward legs bow north, westward legs south, so the route never crosses itself
+const MAP_ROUTE = MAP_STOPS.slice(1).map((b, i) => {
+  const a = MAP_STOPS[i]
+  const dist = Math.hypot(b.x - a.x, b.y - a.y), bow = (b.x > a.x ? -1 : 1) * dist * 0.22
+  return `M${a.x.toFixed(2)} ${a.y.toFixed(2)} Q${((a.x + b.x) / 2).toFixed(2)} ${((a.y + b.y) / 2 + bow).toFixed(2)} ${b.x.toFixed(2)} ${b.y.toFixed(2)}`
+})
+// every land dot as one path: a tiny circle per '1' in the bitmap
+const MAP_DOTS = LAND.flatMap((row, r) => [...row].map((c, k) => c === '1'
+  ? `M${(k * MAP.cell + MAP.cell / 2 - 0.34).toFixed(2)} ${(r * MAP.cell + MAP.cell / 2).toFixed(2)}a.34 .34 0 1 0 .68 0a.34 .34 0 1 0 -.68 0` : '')).join('')
+const LABEL_AT = {
+  right: 'left-3 top-1/2 -translate-y-1/2',
+  top: 'bottom-3 left-1/2 -translate-x-1/2 text-center',
+  'below-left': 'top-3 right-0 text-right',
+}
+function PortfolioMap({ className = '' }) {
+  return (
+    <div aria-hidden="true" className={`relative ${className}`} style={{ aspectRatio: `${MAP_W} / ${MAP_H}` }}>
+      <svg viewBox={`0 0 ${MAP_W} ${MAP_H}`} className="absolute inset-0 h-full w-full overflow-visible">
+        <path d={MAP_DOTS} fill="#ffffff" fillOpacity="0.17" />
+        <g fill="none" stroke="#ffcf33" strokeOpacity="0.55" strokeWidth="0.3" strokeLinecap="round">
+          {MAP_ROUTE.map((d) => <path key={d} d={d} strokeDasharray="1.1 0.9" className="map-route" />)}
+        </g>
+      </svg>
+      {MAP_STOPS.map((st) => (
+        <div key={st.id} className="absolute" style={{ left: `${(st.x / MAP_W) * 100}%`, top: `${(st.y / MAP_H) * 100}%` }}>
+          <span className="absolute h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-yellow/50 animate-ping motion-reduce:animate-none" />
+          <span className="absolute h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-yellow shadow-[0_0_14px_rgba(255,207,51,0.9)]" />
+          <span className={`absolute whitespace-nowrap leading-tight ${LABEL_AT[st.label]}`}>
+            <span className="block text-[12px] sm:text-[13px] font-extrabold text-brand-white">{st.name}</span>
+            <span className="block text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.16em] text-brand-yellow">{st.months.join(' · ')}</span>
+          </span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 // dt stays first in the markup for screen readers; flex order puts the figure
 // on top so every figure shares one line. `big` is the deck's numbers slide.
 function StatList({ big = false, className = '' }) {
@@ -841,8 +910,11 @@ export default function App() {
       <section id="top" className="relative overflow-hidden px-5 pb-16 pt-36 sm:pt-44">
         <div aria-hidden className="pointer-events-none absolute -right-24 -top-24 h-[520px] w-[520px] rounded-full bg-brand-yellow/[0.05] blur-3xl" />
         <div className="mx-auto max-w-7xl">
+          {/* the words on the left, the 2027 map on the right from lg (under the buttons below it) */}
+          <div className="lg:grid lg:grid-cols-12 lg:items-center lg:gap-10">
+          <div className="lg:col-span-7">
           <p className="hero-rise hero-d1 text-[12px] font-black uppercase tracking-[0.26em] text-brand-yellow">{brandCase(COPY.hero.eyebrow)}</p>
-          <h1 className="hero-rise hero-d2 mt-6 max-w-5xl text-5xl font-extrabold uppercase leading-[0.98] tracking-tight sm:text-7xl">
+          <h1 className="hero-rise hero-d2 mt-6 max-w-5xl text-5xl font-extrabold uppercase leading-[0.98] tracking-tight sm:text-7xl lg:text-5xl xl:text-6xl">
             {COPY.hero.title}
           </h1>
           <p className="hero-rise hero-d3 mt-7 max-w-2xl text-lg leading-relaxed text-brand-gray sm:text-xl">{COPY.hero.lede}</p>
@@ -853,6 +925,9 @@ export default function App() {
             <a href={`mailto:${CONTACT}`} className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-white/30 px-7 py-3.5 text-sm font-bold uppercase tracking-[0.13em] text-brand-white transition hover:border-brand-yellow hover:text-brand-yellow">
               Talk to the team
             </a>
+          </div>
+          </div>
+          <PortfolioMap className="hero-rise hero-d4 mt-12 mr-10 sm:mr-24 lg:mt-0 lg:mr-0 lg:col-span-5" />
           </div>
           <StatList className="hero-rise hero-d4 mt-14" />
         </div>

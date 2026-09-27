@@ -110,3 +110,9 @@
   .hero-rise { opacity: 1; transform: none; animation: none; }
   .marquee-track { animation: none; }
 }
+
+/* The 2027 map in the hero (PortfolioMap): the route's dashes flow slowly
+   from city to city; still under reduced motion. */
+@keyframes map-route { to { stroke-dashoffset: -8; } }
+.map-route { animation: map-route 6s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .map-route { animation: none; } }
