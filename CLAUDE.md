@@ -96,3 +96,46 @@ Confirm it prints `Published` before reporting done. Publishes to
   on the item); New York and the NEXTPredict Summit compose the platform
   logo with a tracked sub-line because no dedicated lockup exists. Media &
   Advertising and External Projects have no mark and stay as text.
+
+## The org move — links, Pages and what to verify
+
+The repos moved from the `stuatnext` account to the `Nextdotio` org (Sep 2026).
+GitHub redirects `github.com` repo URLs and git remotes on a transfer; it does
+**not** redirect GitHub Pages. Every `stuatnext.github.io/...` URL 404s, so any
+such link left in shipped code is a dead link on a client-facing page. This hub
+links every sibling site, so it carries more of that risk than any other repo.
+
+- The live site is `https://nextdotio.github.io/next-2027/`.
+- Sweep `index.html` as well as `src/` and `public/`. `og:url` and `og:image`
+  live only in `index.html`, so fixing `src/` alone leaves the page rendering
+  correctly while still previewing against a dead URL wherever it is shared.
+  Six sites stayed stale exactly that way after the first pass.
+- `Published` from `npm run deploy` only means gh-pages accepted the push.
+  Verify the deployed artefact, not the local build: fetch the live page, pull
+  the hashed `assets/index-*.js` out of it, and grep that for
+  `stuatnext.github.io`. It should come back empty, and
+  `nextdotio.github.io` should appear once per linked property.
+
+## This repository is public
+
+`Nextdotio/next-2027` is public (checked 28 Sep 2026), so everything tracked
+here is world-readable — this file and `README.md` included, not just the built
+site. Internal commercial reasoning belongs in a git-ignored file, never in a
+tracked one. Treat anything written here as readable by a client or a
+competitor.
+
+## Editing through the GitHub web UI
+
+The 22 Sep copy rule above was first applied by uploading files through the
+GitHub web UI, and it did not take effect, because an upload puts a file
+exactly where it is dropped:
+
+- The app is `src/App.jsx`. An `App.jsx` at the repo root is not imported by
+  anything — the site builds from `src/` and silently ignores it. If a change
+  seems not to apply, check for a stray copy at the root first.
+- `index.html` is Vite's entry point, not a build artefact. Deleting it breaks
+  the build outright. Same for `CLAUDE.md` and `README.md`, which are tracked
+  project files, not leftovers from an upload.
+
+Prefer a branch and a PR over web-UI uploads; if you do upload, build the
+branch afterwards to confirm it still compiles.
