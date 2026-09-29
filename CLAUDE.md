@@ -3,8 +3,8 @@
 Single-page React (Vite + Tailwind v4) app: the consolidated landing page for
 the whole 2027 commercial portfolio. It introduces NEXT.io + NEXTPredict,
 links every live brochure, and carries the aggregated brand walls. All copy
-lives in arrays at the top of `src/App.jsx` (`STATS`, `PLATFORMS`,
-`PORTFOLIO`, `WHY`, `WALLS`) plus the `CONTACT` constant (sales@next.io, the
+lives in arrays at the top of `src/App.jsx` (`STATS`, `PORTFOLIO`, `WHY`,
+`WALLS`) plus the `CONTACT` constant (sales@next.io, the
 address every rate card uses).
 
 ## Deploying to gh-pages — ALWAYS
@@ -46,10 +46,18 @@ Confirm it prints `Published` before reporting done. Publishes to
 - **This page carries no prices and no availability** beyond the entry-level
   figures already public on the linked cards (HR from €2,500, marketingNEXT
   €4,000). The rate cards are the source of truth - this page only links.
-- **Every claim is lifted from a live sibling site** (215k+ pageviews, ~40k
-  LinkedIn, ~16k subscribers, 5/5 sold-out, +69 partner NPS from the Valletta
-  card, 2,000 executives, dates and venues). If a sibling card changes a
+- **Every claim is lifted from a live sibling site** (the hero figures: the
+  200 brands on the walls, New York's 2,000 senior executives, the retreats'
+  83% C-level, Valletta's +69 partner NPS against the survey platform's +27
+  benchmark and 84% who will partner again, the media pack's 215k+ pageviews;
+  in Why NEXT, New York's 92% partner satisfaction and +62 partner NPS; the
+  media card's ~16k subscribers, 35-40% opens, 21k+ launch-episode views and
+  30 June founding rates; dates and venues). If a sibling card changes a
   claim, change it here too - never let the hub run ahead of the cards.
+- **A single event's record is never the business's.** "Five for five sold
+  out" is New York's (its ABOUT_STATS), so it lives on the New York card only
+  (Stuart, 29 Sep 2026: "that is specifically referring to New York. We have
+  done more than that").
 - Internal material (targets, sell-through, comp policy, deal terms) never
   appears here. Neither does `pragmatic.html` or any client-specific page.
 
@@ -115,12 +123,13 @@ shareable link on every portfolio card.
   the content arrays, so a new portfolio item, stat, platform or reason
   appears in the deck on the next build with no deck edit. Section headings
   and leads live once in `COPY` and are read by the page and the deck alike.
-  The composition is 17 slides: cover (both logos, the hero title and lede,
+  The composition is 15 slides: cover (both logos, the hero title and lede,
   "In this presentation" from `CONTENTS` with counts, and the only hint,
-  "Use the arrow keys, or swipe") · the numbers (`STATS`) · the platforms
-  (`PLATFORMS` and the media pack link) · for each `PORTFOLIO` group, a group
-  slide (its items as buttons with their dates or `when` line) and then one
-  slide per item, in page order (Events 4, Media 2, Communities 2) · why
+  "Use the arrow keys, or swipe") · the numbers (`STATS`) · for each
+  `PORTFOLIO` group, a group slide (its items as buttons with their dates or
+  `when` line) and then one slide per item, in page order (Events 5, Media 1,
+  Communities 2); a group with one card has no group slide, and
+  `SLIDE_ALIAS` sends its id (`?present=media`) to the card's slide · why
   NEXT (`WHY`) · who's in the room (`TOTAL_BRANDS` and one marquee strip per
   wall, from the existing `WALLS` data) · next steps (`CONTACT` mailto and
   every rate card link).
@@ -132,9 +141,9 @@ shareable link on every portfolio card.
   beyond the two entry figures already inside the HR Connect and
   marketingNEXT lines.
 - **URL parameters.** `?present` opens the cover; `?present=<slide id>`
-  opens that slide. Slide ids: `cover`, `numbers`, `platforms`, `events`,
-  `media`, `communities`, `why`, `room`, `next-steps`, and `p-<slug>` for an
-  item, which is also its card's anchor (`#p-next-summit-new-york`,
+  opens that slide. Slide ids: `cover`, `numbers`, `events`, `communities`,
+  `why`, `room`, `next-steps`, `media` (an alias of `p-media-advertising`),
+  and `p-<slug>` for an item, which is also its card's anchor (`#p-next-summit-new-york`,
   `#p-hr-connect`...). Groups are anchors too (`#events`, `#media`,
   `#communities`). The slug comes from `name`, so renaming an item changes
   its anchor and slide id, and links already sent stop landing on it.
@@ -182,7 +191,7 @@ Rules every future edit must keep:
 - Minimum 44px touch targets, visible focus (the yellow `:focus-visible`
   ring in `index.css`), and no horizontal scroll at 390px, on the page and
   on every slide. QA: walk `?present` with ArrowRight at 390 and 1440 and
-  expect 17 slides.
+  expect 15 slides.
 
 ## The hero: the 2027 map (27 Sep 2026)
 
@@ -205,3 +214,42 @@ first screen had an empty right half; it now carries the year on a map.
   no city the cards do not name.
 - The pins pulse and the route's dashes flow; both hold still under reduced
   motion. The map is `aria-hidden`: every city and month is on the cards.
+
+
+## Events first, clearer signposts (29 Sep 2026)
+
+Stuart: "we are known more for our events", the platforms section "feels
+redundant" beside the portfolio, the media signpost "needs to be very clear
+that it's media and advertising, so the digital packages", "I want both the
+NEXT.io and NEXTPredict logos to be visible", and stats that promote NEXT as a
+business. Partners choose NEXT because "the room is senior", "we are
+relationships driven", "value driven", "we want to connect people and make
+sure that they get the right business opportunities", "we work very closely
+with clients. We really do care", and quality.
+
+- **Page order:** hero → the 2027 portfolio (Events, then Media & advertising,
+  then Communities) → Why NEXT → who's in the room → the call to action. The
+  platforms section ("Two newsrooms. One audience that matters.") is gone, and
+  so are `PLATFORMS`, `PlatformCard` and its slide: the one media card carries
+  both platforms.
+- **The hero** leads with both logos side by side (letter heights matched:
+  NEXT.io 28/36px, NEXTPredict 23/29px, 24/20px below 360px so the pair keeps
+  one line at 320), then one button per family of brochures (`PORTFOLIO`
+  order, Events filled) and "Talk to the team". The lede leads with the events
+  and no longer says "every rate card one click away": that is the portfolio's
+  title, once.
+- **Groups:** `group` is the anchor and never changes (#events, #media,
+  #communities); `title` and `note` are what shows ("Media & advertising",
+  "Digital packages on NEXT.io and NEXTPredict"). External Projects moved from
+  Media to Events, as the fifth card, `wide` across the row. The media card is
+  `wide` too: both logos are its title (`logos`, so it never repeats the group
+  name), its facts sit beside it, and its button says "View the media rate
+  card".
+- **Card buttons** are real pills (yellow outline, filled on hover over the
+  card), still the card's stretched link.
+- **The nav** names the families: Events, Media & advertising, Communities,
+  Why NEXT, and Who's in the room from xl (at lg it squeezed the logo; the
+  logo is `shrink-0` now).
+- **Why NEXT** is Stuart's four reasons: the room is senior, relationships
+  first, the right opportunities, quality you can measure. No figure there
+  repeats one in `STATS`.
