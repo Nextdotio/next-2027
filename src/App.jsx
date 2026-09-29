@@ -25,7 +25,8 @@ const MEDIA_PACK = 'https://nextdotio.github.io/next-media-pack-2027/'
 // below; 2,000 is New York's ABOUT_STATS; 83% C-level is the retreats'
 // SENIORITY, which describes the editions before 2026 (the retreat card labels
 // it "previous editions", so this label says previous retreats); +69 and 84% are Valletta's 2026 VERDICT (the benchmark as the
-// survey platform reports it); 215k+ is the media pack's. If a card changes a
+// survey platform reports it); 125k+ is the media pack's (editorial pageviews a
+// month, averaged over Jan 2025 - Sep 2026). If a card changes a
 // figure, change it here too. New York's "five for five sold out" stays on the
 // New York card: it is that event's record, not the business's.
 const STATS = [
@@ -34,7 +35,7 @@ const STATS = [
   ['83%', 'C-level delegates at previous retreats'],
   ['+69', 'Partner NPS, Valletta 2026 · benchmark +23'],
   ['84%', 'Valletta 2026 partners who will partner again'],
-  ['215k+', 'Monthly pageviews, NEXT.io'],
+  ['125k+', 'Monthly editorial pageviews, NEXT.io'],
 ]
 
 // Events carry `dates`: one leg per event (a retreat card has two), each shown
@@ -113,9 +114,9 @@ const PORTFOLIO = [
         extra: 'Display, category sponsorship, newsletters, podcasts and Spotlight',
         line: 'Your brand in front of your buyers every day between the events, on both platforms, with 2026 delivery data on the rate card.',
         facts: [
-          '215k+ monthly pageviews on NEXT.io',
+          '125k+ monthly editorial pageviews on NEXT.io',
           '~16k newsletter subscribers · 35-40% open rates',
-          'NEXTPredict launch podcast episode: 21k+ views in 13 days',
+          'NEXTPredict launch podcast episode: 37k+ views',
           'NEXTPredict founding rates run to 30 June 2027',
         ],
         href: MEDIA_PACK,
