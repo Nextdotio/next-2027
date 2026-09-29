@@ -23,14 +23,15 @@ const MEDIA_PACK = 'https://nextdotio.github.io/next-media-pack-2027/'
 // promote NEXT as a business, not one event's record). Each figure is lifted
 // from a live sibling card, never typed fresh: the brand count is the walls
 // below; 2,000 is New York's ABOUT_STATS; 83% C-level is the retreats'
-// SENIORITY; +69 and 84% are Valletta's 2026 VERDICT (the benchmark as the
+// SENIORITY, which describes the editions before 2026 (the retreat card labels
+// it "previous editions", so this label says previous retreats); +69 and 84% are Valletta's 2026 VERDICT (the benchmark as the
 // survey platform reports it); 215k+ is the media pack's. If a card changes a
 // figure, change it here too. New York's "five for five sold out" stays on the
 // New York card: it is that event's record, not the business's.
 const STATS = [
   [String(TOTAL_BRANDS), 'Brands in our rooms in 2026'],
   ['2,000', 'Senior executives, New York 2027'],
-  ['83%', 'C-level delegates at our retreats'],
+  ['83%', 'C-level delegates at previous retreats'],
   ['+69', 'Partner NPS, Valletta 2026 · benchmark +27'],
   ['84%', 'Valletta 2026 partners who will partner again'],
   ['215k+', 'Monthly pageviews, NEXT.io'],

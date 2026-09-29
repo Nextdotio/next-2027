@@ -48,7 +48,8 @@ Confirm it prints `Published` before reporting done. Publishes to
   €4,000). The rate cards are the source of truth - this page only links.
 - **Every claim is lifted from a live sibling site** (the hero figures: the
   200 brands on the walls, New York's 2,000 senior executives, the retreats'
-  83% C-level, Valletta's +69 partner NPS against the survey platform's +27
+  83% C-level at previous editions (the retreat card's own label since 29 Sep
+  2026), Valletta's +69 partner NPS against the survey platform's +27
   benchmark and 84% who will partner again, the media pack's 215k+ pageviews;
   in Why NEXT, New York's 92% partner satisfaction and +62 partner NPS; the
   media card's ~16k subscribers, 35-40% opens, 21k+ launch-episode views and
