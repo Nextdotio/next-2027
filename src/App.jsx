@@ -32,7 +32,7 @@ const STATS = [
   [String(TOTAL_BRANDS), 'Brands in our rooms in 2026'],
   ['2,000', 'Senior executives, New York 2027'],
   ['83%', 'C-level delegates at previous retreats'],
-  ['+69', 'Partner NPS, Valletta 2026 · benchmark +27'],
+  ['+69', 'Partner NPS, Valletta 2026 · benchmark +23'],
   ['84%', 'Valletta 2026 partners who will partner again'],
   ['215k+', 'Monthly pageviews, NEXT.io'],
 ]
@@ -174,7 +174,7 @@ const WHY = [
   {
     icon: BadgeCheck,
     t: 'Quality you can measure',
-    b: 'Our events are run for people whose time is valuable. In New York, 92% of 2026 partners were satisfied, and they gave us a partner NPS of +62 against a benchmark of +27.',
+    b: 'Our events are run for people whose time is valuable. In New York, 92% of 2026 partners were satisfied, and they gave us a partner NPS of +62 against a benchmark of +21.',
   },
 ]
 
