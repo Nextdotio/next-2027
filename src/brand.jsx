@@ -1,6 +1,7 @@
 // Brand names keep their own casing inside uppercase labels: NEXT.io and
-// NEXTPredict, never NEXT.IO or NEXTPREDICT. Used by the page and the deck.
-const BRANDS = /(NEXT\.io|NEXTPredict)/
+// NEXTPredict, never NEXT.IO or NEXTPREDICT. iGaming keeps its lowercase i the
+// same way, never IGAMING. Used by the page and the deck.
+const BRANDS = /(NEXT\.io|NEXTPredict|iGaming)/
 
 export function brandCase(text) {
   if (typeof text !== 'string') return text
