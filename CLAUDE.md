@@ -188,6 +188,8 @@ Rules every future edit must keep:
 - Inside any uppercase element (the deck's top bar and slide-list headings
   included) brand names go through `brandCase` in `src/brand.jsx`, so they
   read NEXT.io and NEXTPredict, never in capitals.
+- iGaming always renders with a lowercase i, including inside uppercase elements (Stuart, 29 Sep 2026).
+  `brandCase` keeps it cased there too.
 - Minimum 44px touch targets, visible focus (the yellow `:focus-visible`
   ring in `index.css`), and no horizontal scroll at 390px, on the page and
   on every slide. QA: walk `?present` with ArrowRight at 390 and 1440 and
