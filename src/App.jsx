@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import {
   ArrowRight, ArrowUpRight, ChevronRight, Globe, Mail, Menu, Presentation, X,
-  TrendingUp, Handshake, Layers, Crown,
+  Handshake, Crown, Target, BadgeCheck,
 } from 'lucide-react'
 import { OPERATORS, PARTNERS, MEMBERS, TOTAL_BRANDS } from './logos.js'
 import { LOGO_METRICS } from './logo-metrics.js'
@@ -19,37 +19,35 @@ const CONTACT = 'sales@next.io'
 const base = import.meta.env.BASE_URL
 const MEDIA_PACK = 'https://nextdotio.github.io/next-media-pack-2027/'
 
+// The business in six figures, events first (Stuart, 29 Sep 2026: stats that
+// promote NEXT as a business, not one event's record). Each figure is lifted
+// from a live sibling card, never typed fresh: the brand count is the walls
+// below; 2,000 is New York's ABOUT_STATS; 83% C-level is the retreats'
+// SENIORITY; +69 and 84% are Valletta's 2026 VERDICT (the benchmark as the
+// survey platform reports it); 215k+ is the media pack's. If a card changes a
+// figure, change it here too. New York's "five for five sold out" stays on the
+// New York card: it is that event's record, not the business's.
 const STATS = [
+  [String(TOTAL_BRANDS), 'Brands in our rooms in 2026'],
+  ['2,000', 'Senior executives, New York 2027'],
+  ['83%', 'C-level delegates at our retreats'],
+  ['+69', 'Partner NPS, Valletta 2026 · benchmark +27'],
+  ['84%', 'Valletta 2026 partners who will partner again'],
   ['215k+', 'Monthly pageviews, NEXT.io'],
-  ['~40k', 'LinkedIn followers'],
-  ['~16k', 'Newsletter subscribers'],
-  ['5/5', 'Sold-out NEXT Summits'],
-  ['+69', 'Partner NPS, Valletta 2026'],
-  ['6', 'Network sites in 2027'],
-]
-
-const PLATFORMS = [
-  {
-    logo: 'next-logo.png',
-    name: 'NEXT.io',
-    line: 'The industry site: news, features, data and research read by iGaming’s decision-makers every day - with the display, category, newsletter and podcast inventory to put your brand inside that habit.',
-    facts: ['215k+ monthly pageviews', '~16k subscribers · 35-40% open rates', 'The NEXT.io Podcast'],
-  },
-  {
-    logo: 'nextpredict-logo.png',
-    name: 'NEXTPredict',
-    line: 'The prediction markets platform - the category covered properly, daily, plus The NEXTPredict Podcast and an October 2027 summit in New York. Founding partner rates run to 30 June 2027.',
-    facts: ['The category’s dedicated news site', 'Launch podcast episode: 21k+ views in 13 days', 'NEXTPredict Summit · October 2027'],
-  },
 ]
 
 // Events carry `dates`: one leg per event (a retreat card has two), each shown
 // as a dated tile beside its venue - never as a run-on line. `days` is the day
 // range; leave it out when only the month is fixed and the tile leads with the
-// month instead. `extra` is the card's one supporting line.
+// month instead. `extra` is the card's one supporting line. A group's `group`
+// is its anchor (#events, #media, #communities: never rename it, links are out
+// there); `title` and `note` are what the page shows. `wide` runs a card across
+// the row (the fifth event, the one media card). Events lead: NEXT is known for
+// its events first (Stuart, 29 Sep 2026).
 const PORTFOLIO = [
   {
     group: 'Events',
+    note: 'Summits, retreats and your own hosted event',
     items: [
       {
         name: 'NEXT Summit New York',
@@ -90,31 +88,44 @@ const PORTFOLIO = [
         href: 'https://nextdotio.github.io/next-retreat-2027/',
         cta: 'View the partner brochure',
       },
+      {
+        name: 'External Projects',
+        when: 'Your own event · your calendar',
+        extra: 'A hosted Drinks Reception at a major industry event',
+        line: 'Your own event, built by the team behind the summits: venue, production, guest list and delivery, for the buyers you want in the room.',
+        href: 'https://nextdotio.github.io/next-external-projects-2027/',
+        cta: 'View the brochure',
+        wide: true,
+      },
     ],
   },
   {
     group: 'Media',
+    title: 'Media & advertising',
+    note: 'Digital packages on NEXT.io and NEXTPredict',
     items: [
       {
         name: 'Media & Advertising',
-        when: 'NEXT.io + NEXTPredict · always-on',
-        extra: 'Display, category ownership, newsletters, podcasts and Spotlight',
-        line: 'Your brand in front of your buyers every day between events, on both platforms, with 2026 delivery data on the rate card.',
+        // [file, alt, card height in px]: the NEXTPredict lockup is sized by letter height, not file height
+        logos: [['brand/next-logo.png', 'NEXT.io', 28], ['brand/nextpredict-logo.png', 'NEXTPredict', 23]],
+        when: 'All year, on both platforms',
+        extra: 'Display, category sponsorship, newsletters, podcasts and Spotlight',
+        line: 'Your brand in front of your buyers every day between the events, on both platforms, with 2026 delivery data on the rate card.',
+        facts: [
+          '215k+ monthly pageviews on NEXT.io',
+          '~16k newsletter subscribers · 35-40% open rates',
+          'NEXTPredict launch podcast episode: 21k+ views in 13 days',
+          'NEXTPredict founding rates run to 30 June 2027',
+        ],
         href: MEDIA_PACK,
-        cta: 'Open the media pack',
-      },
-      {
-        name: 'External Projects',
-        when: 'Private builds · your calendar',
-        extra: 'Brief-led, priced on the room you want',
-        line: 'Your own event, built by the team behind the summits: venue, production, guest list, delivery.',
-        href: 'https://nextdotio.github.io/next-external-projects-2027/',
-        cta: 'See the formats',
+        cta: 'View the media rate card',
+        wide: true,
       },
     ],
   },
   {
     group: 'Communities',
+    note: 'Annual memberships',
     items: [
       {
         name: 'HR Connect',
@@ -138,26 +149,31 @@ const PORTFOLIO = [
   },
 ]
 
+// Why partners choose NEXT, in Stuart's words (29 Sep 2026): the room is
+// senior, we are relationship- and value-driven, we connect people to the right
+// business opportunities, we work closely with clients and care, and quality.
+// No figure here repeats one in STATS; the New York verdict is its own card's
+// (VERDICT in next-summit-new-york).
 const WHY = [
   {
     icon: Crown,
     t: 'The room is senior',
-    b: 'Curated guest lists, operator-weighted rooms and C-level density are the product. We cap, invite and verify - we do not pack floors.',
-  },
-  {
-    icon: TrendingUp,
-    t: 'Sold out, five for five',
-    b: 'Every NEXT Summit to date has sold out, and partners rebook before the public sale. Inventory is real: slots, caps and exclusives are enforced, never oversold.',
-  },
-  {
-    icon: Layers,
-    t: 'Full-funnel by design',
-    b: 'Daily media reach, event-week proximity and year-round community trust - one partner message travels the whole path instead of stopping at a stand.',
+    b: 'Curated guest lists, operator-weighted rooms and C-level density are the product. We cap, invite and verify. We do not pack floors.',
   },
   {
     icon: Handshake,
-    t: 'One team, one plan',
-    b: 'A single commercial team across media, events and communities. Portfolio deals compound: the same brand, sequenced across the year, at every altitude.',
+    t: 'Relationships first',
+    b: 'We work closely with every partner, from the first brief to the follow-up, and we care whether it worked. Partners come back because the relationship is real.',
+  },
+  {
+    icon: Target,
+    t: 'The right opportunities',
+    b: 'We connect people with the right business opportunities, not the most people. Introductions are made on purpose, so time in the room goes to conversations that lead to business.',
+  },
+  {
+    icon: BadgeCheck,
+    t: 'Quality you can measure',
+    b: 'Our events are run for people whose time is valuable. In New York, 92% of 2026 partners were satisfied, and they gave us a partner NPS of +62 against a benchmark of +27.',
   },
 ]
 
@@ -167,11 +183,15 @@ const WALLS = [
   { label: 'Members of our communities', dir: 'members', files: MEMBERS },
 ]
 
+// The bar signposts the three families of brochures by name, then the proof.
+// A third entry holds a link back until that width (the room joins at xl: at
+// lg the five links, Present and Contact sales would squeeze the logo).
 const NAV = [
-  ['platforms', 'Platforms'],
-  ['portfolio', 'The 2027 portfolio'],
+  ['events', 'Events'],
+  ['media', 'Media & advertising'],
+  ['communities', 'Communities'],
   ['why', 'Why NEXT'],
-  ['room', 'Who’s in the room'],
+  ['room', 'Who’s in the room', 'xl'],
 ]
 
 // Section copy, read by the page and by the Present deck alike, so a slide
@@ -179,14 +199,9 @@ const NAV = [
 // "iGaming" or "the industry" (the content rules in the repo notes).
 const COPY = {
   hero: {
-    eyebrow: 'NEXT.io · NEXTPredict · The 2027 commercial portfolio',
+    eyebrow: 'The 2027 commercial portfolio',
     title: <>Where businesses<br />launch and grow.</>,
-    lede: 'Two media platforms your buyers read every day. Three flagship events and two invitation-only retreats. The communities in between. One commercial team, and every 2027 rate card one click away.',
-  },
-  platforms: {
-    eyebrow: 'The platforms',
-    title: <>Two newsrooms. <span className="text-brand-yellow">One audience that matters.</span></>,
-    lead: 'Everything in the portfolio stands on the media: the sites, newsletters and shows your buyers actually read and watch. Partner brands live inside that habit all year.',
+    lede: 'Three flagship summits and two invitation-only retreats. Two media platforms your buyers read every day. The communities in between. One team behind all of it, and one plan for your year.',
   },
   portfolio: {
     eyebrow: 'The 2027 portfolio',
@@ -227,24 +242,28 @@ const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`
 // The deck, built from the arrays above: a new portfolio item, stat, platform
 // or reason appears in it on the next build. Every item appears exactly once,
 // in the page's order, after its group's slide.
+// A group with one card (Media) has no group slide: its card's slide stands
+// for it, and SLIDE_ALIAS sends the group's id (?present=media) there.
+const groupTitle = (g) => g.title || g.group
 const SLIDES = [
   { id: 'cover', label: 'The 2027 portfolio', group: 'Start', kind: 'cover' },
   { id: 'numbers', label: 'The numbers', group: 'Start', kind: 'numbers' },
-  { id: 'platforms', label: 'The platforms', group: 'The platforms', kind: 'platforms' },
   ...PORTFOLIO.flatMap((g) => [
-    { id: groupId(g), label: g.group, group: g.group, kind: 'group', g },
-    ...g.items.map((it, n) => ({ id: cardId(it), label: it.name, group: g.group, kind: 'item', g, it, n })),
+    ...(g.items.length > 1 ? [{ id: groupId(g), label: groupTitle(g), group: groupTitle(g), kind: 'group', g }] : []),
+    ...g.items.map((it, n) => ({ id: cardId(it), label: it.name, group: groupTitle(g), kind: 'item', g, it, n })),
   ]),
   { id: 'why', label: 'Why NEXT', group: 'Why NEXT', kind: 'why' },
   { id: 'room', label: 'Who’s in the room', group: 'Who’s in the room', kind: 'room' },
   { id: 'next-steps', label: 'Next steps', group: 'Next steps', kind: 'next' },
 ]
 
+const SLIDE_ALIAS = Object.fromEntries(PORTFOLIO.filter((g) => g.items.length === 1).map((g) => [groupId(g), cardId(g.items[0])]))
+const groupSlideId = (g) => SLIDE_ALIAS[groupId(g)] || groupId(g)
+
 // "In this presentation" on the cover: every section after it, with its count.
 const CONTENTS = [
   ['numbers', 'The numbers', plural(STATS.length, 'figure')],
-  ['platforms', 'The platforms', PLATFORMS.map((p) => p.name).join(' · ')],
-  ...PORTFOLIO.map((g) => [groupId(g), g.group, plural(g.items.length, 'rate card')]),
+  ...PORTFOLIO.map((g) => [groupSlideId(g), groupTitle(g), plural(g.items.length, 'rate card')]),
   ['why', 'Why NEXT', plural(WHY.length, 'reason')],
   ['room', 'Who’s in the room', `${TOTAL_BRANDS} brands`],
   ['next-steps', 'Next steps', CONTACT],
@@ -409,6 +428,7 @@ function ItemMeta({ it, big = false }) {
 // that compose the platform logo; otherwise its name. Phrasing content only,
 // so it can sit in a heading or a button.
 function Lockup({ it, size = 'card' }) {
+  if (it.logos) return <PlatformLogos it={it} size={size} />
   if (!it.logo) return brandCase(it.name)
   const h = it.logoH || 'h-9'
   const src = `${base}logos/${it.logo}`
@@ -429,20 +449,60 @@ function Lockup({ it, size = 'card' }) {
 // One card per rate card. The whole card opens the sibling site through the
 // CTA's stretched link; Present and Copy link sit above that link, so they
 // are real buttons, never controls nested inside an anchor.
+// Both platform logos stand as the title of the one card that sells both
+// (Media & advertising), so the card never repeats its group's name. `h` is
+// the card height; a slide scales it up, as Lockup does for a single logo.
+function PlatformLogos({ it, size = 'card' }) {
+  const scale = size === 'slide' ? 1.45 : size === 'list' ? 0.95 : 1
+  return (
+    <span className="flex flex-wrap items-center gap-x-5 gap-y-3">
+      {it.logos.map(([file, alt, px], k) => (
+        <span key={file} className="flex items-center gap-5">
+          {k > 0 && <span aria-hidden className="h-6 w-px bg-brand-white/25" />}
+          <img src={`${base}logos/${file}`} alt={alt} className="w-auto" style={{ height: `${Math.round(px * scale)}px` }} />
+        </span>
+      ))}
+    </span>
+  )
+}
+
+function FactList({ facts, big = false, className = '' }) {
+  return (
+    <ul className={`space-y-2.5 ${className}`}>
+      {facts.map((f) => (
+        <li key={f} className={`flex items-start gap-2.5 text-brand-white/90 ${big ? 'text-[15px] leading-6 sm:text-base' : 'text-[15px] leading-6'}`}>
+          <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-brand-yellow" /><span>{f}</span>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 function PortfolioCard({ it, onPresent }) {
   const id = cardId(it)
-  return (
-    <article id={id} tabIndex={-1}
-      className="jump-card animate-on-scroll group relative flex flex-col rounded-2xl border border-line bg-raise p-7 transition hover:border-brand-yellow/60 focus:outline-none">
+  const body = (
+    <>
       <div className="flex items-start justify-between gap-4">
-        <h4 className={it.logo ? 'min-h-14' : 'text-2xl font-extrabold uppercase tracking-tight'}><Lockup it={it} /></h4>
+        <h4 className={it.logo || it.logos ? 'min-h-14' : 'text-2xl font-extrabold uppercase tracking-tight'}><Lockup it={it} /></h4>
         <ArrowUpRight className="h-6 w-6 shrink-0 text-brand-gray transition group-hover:text-brand-yellow" aria-hidden />
       </div>
       <ItemMeta it={it} />
       <p className="mt-5 leading-relaxed text-brand-white/85">{it.line}</p>
-      <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-1 pt-6">
-        <a href={it.href} target="_blank" rel="noopener noreferrer" className="card-link text-sm font-bold uppercase tracking-[0.13em] text-brand-yellow">
-          {it.cta}<ArrowRight className="ml-2 inline-block h-4 w-4 align-[-3px] transition group-hover:translate-x-1" aria-hidden />
+    </>
+  )
+  return (
+    <article id={id} tabIndex={-1}
+      className={`jump-card animate-on-scroll group relative flex flex-col rounded-2xl border border-line bg-raise p-7 transition hover:border-brand-yellow/60 focus:outline-none ${it.wide ? 'md:col-span-2' : ''}`}>
+      {it.facts ? (
+        <div className="lg:grid lg:grid-cols-12 lg:gap-10">
+          <div className="lg:col-span-7">{body}</div>
+          <FactList facts={it.facts} className="mt-6 lg:col-span-5 lg:mt-1" />
+        </div>
+      ) : body}
+      <div className="mt-auto flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-6">
+        <a href={it.href} target="_blank" rel="noopener noreferrer"
+          className="card-link inline-flex min-h-11 items-center gap-2 rounded-full border border-brand-yellow/70 px-5 text-sm font-bold uppercase tracking-[0.13em] text-brand-yellow transition group-hover:bg-brand-yellow group-hover:text-brand-dark">
+          {it.cta}<ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
           <span className="sr-only normal-case">: {it.name}, opens in a new tab</span>
         </a>
         <div className="relative z-10 -mx-3 flex items-center">
@@ -537,22 +597,6 @@ function StatList({ big = false, className = '' }) {
         </div>
       ))}
     </dl>
-  )
-}
-
-function PlatformCard({ pl, big = false, className = '' }) {
-  return (
-    <div className={`flex flex-col rounded-2xl border border-line bg-raise ${big ? 'p-6 sm:p-8' : 'p-8'} ${className}`}>
-      <img src={`${base}logos/brand/${pl.logo}`} alt={pl.name} className="h-9 w-auto self-start" />
-      <p className={`mt-5 leading-relaxed text-brand-gray ${big ? 'sm:text-[17px]' : ''}`}>{pl.line}</p>
-      <ul className="mt-5 space-y-2">
-        {pl.facts.map((f) => (
-          <li key={f} className={`flex items-start gap-2.5 text-brand-white/90 ${big ? 'text-[15px] leading-6' : 'text-sm'}`}>
-            <span className={`h-1.5 w-1.5 shrink-0 rounded-full bg-brand-yellow ${big ? 'mt-[9px]' : 'mt-[7px]'}`} />{f}
-          </li>
-        ))}
-      </ul>
-    </div>
   )
 }
 
@@ -658,24 +702,8 @@ function NumbersSlide() {
   return (
     <div>
       <SlideEyebrow>The numbers</SlideEyebrow>
-      <SlideTitle>The portfolio at a glance.</SlideTitle>
+      <SlideTitle>NEXT in numbers.</SlideTitle>
       <StatList big className="mt-8 sm:mt-10" />
-    </div>
-  )
-}
-
-function PlatformsSlide() {
-  return (
-    <div>
-      <SlideEyebrow>{COPY.platforms.eyebrow}</SlideEyebrow>
-      <SlideTitle>{COPY.platforms.title}</SlideTitle>
-      <div className="mt-8 grid gap-5 lg:grid-cols-2">
-        {PLATFORMS.map((pl) => <PlatformCard key={pl.name} pl={pl} big />)}
-      </div>
-      <a href={MEDIA_PACK} target="_blank" rel="noopener noreferrer"
-        className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-bold uppercase tracking-[0.13em] text-brand-yellow transition hover:brightness-110">
-        Media & advertising rate card <ArrowUpRight className="h-4 w-4" aria-hidden /><span className="sr-only">, opens in a new tab</span>
-      </a>
     </div>
   )
 }
@@ -685,16 +713,17 @@ function GroupSlide({ g, goId }) {
     <div>
       <SlideEyebrow>{COPY.portfolio.eyebrow}</SlideEyebrow>
       <div className="mt-4 flex flex-wrap items-baseline gap-x-5 gap-y-2">
-        <h2 className="text-5xl font-extrabold uppercase leading-none tracking-tight sm:text-6xl">{g.group}</h2>
+        <h2 className="text-5xl font-extrabold uppercase leading-none tracking-tight sm:text-6xl">{groupTitle(g)}</h2>
         <p className="text-sm font-bold uppercase tracking-[0.18em] text-brand-gray">{plural(g.items.length, 'rate card')}</p>
       </div>
+      {g.note && <p className="mt-3 text-lg text-brand-gray">{g.note}</p>}
       <ul className="mt-8 grid gap-4 md:grid-cols-2">
         {g.items.map((it) => (
           <li key={it.name}>
             <button type="button" onClick={() => goId(cardId(it))}
               className="group flex h-full w-full flex-col justify-between gap-5 rounded-2xl border border-line bg-raise p-6 text-left transition-colors hover:border-brand-yellow/60">
               <span className="flex w-full items-start justify-between gap-4">
-                <span className={it.logo ? 'min-w-0' : 'min-w-0 text-2xl font-extrabold uppercase tracking-tight'}><Lockup it={it} size="list" /></span>
+                <span className={it.logo || it.logos ? 'min-w-0' : 'min-w-0 text-2xl font-extrabold uppercase tracking-tight'}><Lockup it={it} size="list" /></span>
                 <ChevronRight className="h-6 w-6 shrink-0 text-brand-gray transition group-hover:translate-x-0.5 group-hover:text-brand-yellow" aria-hidden />
               </span>
               {it.dates ? <ScheduleLine dates={it.dates} /> : <span className="text-[15px] font-semibold text-brand-yellow">{it.when}</span>}
@@ -711,8 +740,8 @@ function ItemSlide({ g, it, n, onShowOnPage }) {
   return (
     <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-14">
       <div className="lg:col-span-7">
-        <SlideEyebrow>{g.group} · {n + 1} of {g.items.length}</SlideEyebrow>
-        <h2 className={`mt-5 ${it.logo ? '' : 'text-4xl font-extrabold uppercase leading-[1.02] tracking-tight sm:text-6xl'}`}><Lockup it={it} size="slide" /></h2>
+        <SlideEyebrow>{g.items.length > 1 ? `${groupTitle(g)} · ${n + 1} of ${g.items.length}` : groupTitle(g)}</SlideEyebrow>
+        <h2 className={`mt-5 ${it.logo || it.logos ? '' : 'text-4xl font-extrabold uppercase leading-[1.02] tracking-tight sm:text-6xl'}`}><Lockup it={it} size="slide" /></h2>
         <p className="mt-6 max-w-2xl text-xl leading-relaxed text-brand-white/90 sm:text-2xl">{it.line}</p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <a href={it.href} target="_blank" rel="noopener noreferrer"
@@ -730,6 +759,7 @@ function ItemSlide({ g, it, n, onShowOnPage }) {
         <div className="rounded-2xl border border-line bg-raise p-6 sm:p-7">
           <p className="text-[11px] font-black uppercase tracking-[0.24em] text-brand-gray">Key facts</p>
           <ItemMeta it={it} big />
+          {it.facts && <FactList facts={it.facts} big className="mt-5" />}
         </div>
       </div>
     </div>
@@ -844,7 +874,6 @@ export default function App() {
     switch (s.kind) {
       case 'cover': return <CoverSlide goId={goId} />
       case 'numbers': return <NumbersSlide />
-      case 'platforms': return <PlatformsSlide />
       case 'group': return <GroupSlide g={s.g} goId={goId} />
       case 'item': return <ItemSlide g={s.g} it={s.it} n={s.n} onShowOnPage={showOnPage} />
       case 'why': return <WhySlide />
@@ -859,15 +888,15 @@ export default function App() {
       {/* ── NAV ─────────────────────────────────────────────────────────── */}
       <header className="fixed inset-x-0 top-0 z-50 border-b border-line bg-ink/90 backdrop-blur">
         <div ref={barRef} className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-5">
-          <a href="#top" className="flex items-center gap-3">
-            <img src={`${base}logos/brand/next-logo.png`} alt="NEXT.io" className="h-7 w-auto" />
+          <a href="#top" className="flex shrink-0 items-center gap-3">
+            <img src={`${base}logos/brand/next-logo.png`} alt="NEXT.io" className="h-7 w-auto shrink-0" />
             {/* the pill steps aside from lg up, where the full nav and the Present button need the room */}
             <span className="hidden whitespace-nowrap rounded-full border border-line px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.18em] text-brand-gray sm:inline lg:hidden">2027 portfolio</span>
           </a>
           <div className="flex items-center gap-3 lg:gap-5 xl:gap-7">
             <nav aria-label="Sections" className="hidden items-center gap-5 lg:flex xl:gap-7">
-              {NAV.map(([id, label]) => (
-                <a key={id} href={`#${id}`} className="whitespace-nowrap text-[13px] font-semibold uppercase tracking-[0.13em] text-brand-gray transition hover:text-brand-yellow">
+              {NAV.map(([id, label, from]) => (
+                <a key={id} href={`#${id}`} className={`whitespace-nowrap text-[13px] font-semibold uppercase tracking-[0.13em] text-brand-gray transition hover:text-brand-yellow ${from === 'xl' ? 'hidden xl:inline' : ''}`}>
                   {label}
                 </a>
               ))}
@@ -913,39 +942,33 @@ export default function App() {
           {/* the words on the left, the 2027 map on the right from lg (under the buttons below it) */}
           <div className="lg:grid lg:grid-cols-12 lg:items-center lg:gap-10">
           <div className="lg:col-span-7">
-          <p className="hero-rise hero-d1 text-[12px] font-black uppercase tracking-[0.26em] text-brand-yellow">{brandCase(COPY.hero.eyebrow)}</p>
-          <h1 className="hero-rise hero-d2 mt-6 max-w-5xl text-5xl font-extrabold uppercase leading-[0.98] tracking-tight sm:text-7xl lg:text-5xl xl:text-6xl">
+          {/* both platforms' logos lead the first screen (Stuart, 29 Sep 2026); letter heights matched, not file heights */}
+          <div className="hero-rise hero-d1 flex items-center gap-x-4 sm:gap-x-5">
+            <img src={`${base}logos/brand/next-logo.png`} alt="NEXT.io" className="h-6 w-auto min-[360px]:h-7 sm:h-9" />
+            <span aria-hidden className="h-6 w-px bg-brand-white/25 sm:h-7" />
+            <img src={`${base}logos/brand/nextpredict-logo.png`} alt="NEXTPredict" className="h-5 w-auto min-[360px]:h-[23px] sm:h-[29px]" />
+          </div>
+          <p className="hero-rise hero-d1 mt-7 text-[12px] font-black uppercase tracking-[0.26em] text-brand-yellow">{COPY.hero.eyebrow}</p>
+          <h1 className="hero-rise hero-d2 mt-5 max-w-5xl text-5xl font-extrabold uppercase leading-[0.98] tracking-tight sm:text-7xl lg:text-5xl xl:text-6xl">
             {COPY.hero.title}
           </h1>
           <p className="hero-rise hero-d3 mt-7 max-w-2xl text-lg leading-relaxed text-brand-gray sm:text-xl">{COPY.hero.lede}</p>
-          <div className="hero-rise hero-d4 mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
-            <a href="#portfolio" className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-yellow px-7 py-3.5 text-sm font-bold uppercase tracking-[0.13em] text-brand-dark transition hover:brightness-110">
-              Explore the portfolio <ArrowRight className="h-4 w-4" aria-hidden />
-            </a>
-            <a href={`mailto:${CONTACT}`} className="inline-flex items-center justify-center gap-2 rounded-full border border-brand-white/30 px-7 py-3.5 text-sm font-bold uppercase tracking-[0.13em] text-brand-white transition hover:border-brand-yellow hover:text-brand-yellow">
-              Talk to the team
-            </a>
-          </div>
+          {/* one button per family of brochures, events first: the signpost on the first screen */}
+          <nav aria-label="The portfolio" className="hero-rise hero-d4 mt-9 flex flex-wrap gap-3">
+            {PORTFOLIO.map((g, k) => (
+              <a key={g.group} href={`#${groupId(g)}`}
+                className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-bold uppercase tracking-[0.13em] transition ${k === 0 ? 'bg-brand-yellow text-brand-dark hover:brightness-110' : 'border border-brand-white/30 text-brand-white hover:border-brand-yellow hover:text-brand-yellow'}`}>
+                {groupTitle(g)} <ArrowRight className="h-4 w-4" aria-hidden />
+              </a>
+            ))}
+          </nav>
+          <a href={`mailto:${CONTACT}`} className="hero-rise hero-d4 mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-bold uppercase tracking-[0.13em] text-brand-gray transition hover:text-brand-yellow">
+            <Mail className="h-4 w-4" aria-hidden /> Talk to the team
+          </a>
           </div>
           <PortfolioMap className="hero-rise hero-d4 mt-12 mr-10 sm:mr-24 lg:mt-0 lg:mr-0 lg:col-span-5" />
           </div>
           <StatList className="hero-rise hero-d4 mt-14" />
-        </div>
-      </section>
-
-      {/* ── PLATFORMS ───────────────────────────────────────────────────── */}
-      <section id="platforms" className="px-5 py-20">
-        <div className="mx-auto max-w-7xl">
-          <SectionHead {...COPY.platforms} />
-          <div className="mt-12 grid gap-6 lg:grid-cols-2">
-            {PLATFORMS.map((pl) => <PlatformCard key={pl.name} pl={pl} className="animate-on-scroll" />)}
-          </div>
-          {/* One rate card covers both platforms, so the link is shown once, under the pair */}
-          <a href={MEDIA_PACK} target="_blank" rel="noopener noreferrer"
-             className="animate-on-scroll mt-8 inline-block text-sm font-bold uppercase tracking-[0.13em] text-brand-yellow hover:brightness-110">
-            Media & advertising rate card<ArrowUpRight className="ml-2 inline-block h-4 w-4 align-[-3px]" aria-hidden />
-            <span className="sr-only">, opens in a new tab</span>
-          </a>
         </div>
       </section>
 
@@ -962,10 +985,13 @@ export default function App() {
             )}
           />
           {PORTFOLIO.map((g) => (
-            <div key={g.group} id={groupId(g)} className="jump-group mt-12">
-              <div className="animate-on-scroll mb-6 flex items-center gap-5">
-                <h3 className="shrink-0 text-sm font-black uppercase tracking-[0.24em] text-brand-gray">{g.group}</h3>
-                <div className="h-px w-full bg-line" />
+            <div key={g.group} id={groupId(g)} className="jump-group mt-14">
+              <div className="animate-on-scroll mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-line pb-4">
+                <div>
+                  <h3 className="text-2xl font-extrabold uppercase tracking-tight sm:text-3xl">{groupTitle(g)}</h3>
+                  {g.note && <p className="mt-1.5 text-brand-gray">{g.note}</p>}
+                </div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-gray">{plural(g.items.length, 'rate card')}</p>
               </div>
               <div className="grid gap-6 md:grid-cols-2">
                 {g.items.map((it) => <PortfolioCard key={it.name} it={it} onPresent={openDeck} />)}
@@ -1037,7 +1063,7 @@ export default function App() {
               <img src={`${base}logos/brand/nextpredict-logo.png`} alt="NEXTPredict" className="h-6 w-auto" />
             </div>
             <p className="mt-3 max-w-md text-sm leading-relaxed text-brand-gray">
-              Media, events and communities that help businesses launch and grow.
+              Events, media and communities that help businesses launch and grow.
               Prices and availability live on each rate card.
             </p>
           </div>
@@ -1051,7 +1077,7 @@ export default function App() {
       {present !== null && (
         <PresentMode
           slides={SLIDES}
-          startId={present}
+          startId={SLIDE_ALIAS[present] || present}
           onClose={closeDeck}
           renderSlide={renderSlide}
           title="The 2027 portfolio"
