@@ -50,7 +50,7 @@ Confirm it prints `Published` before reporting done. Publishes to
   200 brands on the walls, New York's 2,000 senior executives, the retreats'
   83% C-level at previous editions (the retreat card's own label since 29 Sep
   2026), Valletta's +69 partner NPS against its July 2026 report's +23
-  benchmark and 84% who will partner again, the media pack's 125k+ monthly
+  benchmark and 84% who will partner again, the media pack's 130k+ monthly
   editorial pageviews;
   in Why NEXT, New York's 92% partner satisfaction and +62 partner NPS against
   its April 2026 report's +21 benchmark (both benchmarks read +27 until 29 Sep
